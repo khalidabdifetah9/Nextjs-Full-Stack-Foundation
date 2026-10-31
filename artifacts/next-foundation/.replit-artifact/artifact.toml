@@ -1,0 +1,23 @@
+kind = "web"
+previewPath = "/"
+title = "Next.js Foundation"
+description = "A clean Next.js App Router starter for a Replit-hosted full-stack application. Provides TypeScript, Tailwind CSS, Framer Motion, ESLint, secure environment-variable conventions, and a minimal preview route without product features."
+version = "1.0.0"
+id = "artifacts/next-foundation"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25220
+
+[services.development]
+run = "pnpm --filter @workspace/next-foundation run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/next-foundation", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/next-foundation", "run", "start" ]
+
+[services.env]
+PORT = "25220"
+BASE_PATH = "/"
