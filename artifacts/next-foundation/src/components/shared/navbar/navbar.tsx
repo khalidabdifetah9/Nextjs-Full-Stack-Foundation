@@ -13,7 +13,7 @@ interface NavLink {
 const Links: NavLink[] = [
   { key: "home", label: "Home", ref: "/" },
   { key: "about", label: "About", ref: "/about" },
-  { key: "get_start", label: "Get Started", ref: "/get-started" },
+  { key: "get_start", label: "Get Started", ref: "/register" },
   { key: "signin", label: "Sign In", ref: "/signin" },
 ];
 
