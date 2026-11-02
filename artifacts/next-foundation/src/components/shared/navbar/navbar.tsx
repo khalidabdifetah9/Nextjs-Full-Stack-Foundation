@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 interface NavLink {
   key: string;
@@ -14,29 +17,64 @@ const Links: NavLink[] = [
   { key: "signin", label: "Sign In", ref: "/signin" },
 ];
 
+const DAY = "Sunday";
+const DATE_RANGE = "17.06 - 27 June 2026";
+
 export default function NavBar() {
+  const pathname = usePathname();
+
   return (
-    <nav className="flex justify-between max-w-450 mx-auto">
-      <ul className="space-x-4 shadow-lg text-white bg-grey-400 rounded-lg px-3">
-        {Links.map(({ label, key, ref }) => (
-          <li key={key}>
-            <Link className="px-5 py-3 bg-black rounded-lg" href={ref}>
-              {label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <div>
-        <Image src={"/Logo.svg"} width={150} height={150} alt="Logo SVG" />
-      </div>
-      <div>
-        <Link
-          className="px-12 py-4 bg-black rounded-lg text-white"
-          href={"/contact-us"}
-        >
-          Contact Us
-        </Link>
-      </div>
-    </nav>
+    <header className="px-6">
+      <nav className="relative flex justify-between items-center py-5 max-w-450 mx-auto">
+        <ul className="flex items-center gap-1 p-1.5 bg-[#F7F6F2] rounded-lg">
+          {Links.map(({ label, key, ref }) => {
+            const isActive = pathname === ref;
+            return (
+              <li key={key}>
+                <Link
+                  href={ref}
+                  className={`inline-block px-5 py-2.5 text-lg rounded-md transition-colors ${
+                    isActive
+                      ? "bg-[#243D35] text-white"
+                      : "text-gray-400 hover:text-[#243D35]"
+                  }`}
+                >
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <Image src={"/logo.png"} width={120} height={120} alt="Logo SVG" />
+        </div>
+
+        <div className="flex items-center gap-10">
+          <div className="text-lg font-semibold leading-snug text-[#243D35]">
+            <p>{DAY}</p>
+            <p>{DATE_RANGE}</p>
+          </div>
+          <Link
+            href={"/contact-us"}
+            className="inline-flex items-center gap-5 px-6 py-4 bg-[#243D35] text-lg rounded-md text-white"
+          >
+            Contact Us
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M2 10L10 2M4 2h6v6" />
+            </svg>
+          </Link>
+        </div>
+      </nav>
+    </header>
   );
 }
