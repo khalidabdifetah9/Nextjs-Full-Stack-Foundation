@@ -25,8 +25,8 @@ export default function NavBar() {
 
   return (
     <header className="px-6">
-      <nav className="relative flex justify-between items-center py-5 max-w-450 mx-auto">
-        <ul className="flex items-center gap-1 p-1.5 bg-[#F7F6F2] rounded-lg">
+      <nav className="relative flex font-poppins justify-between items-center py-5 max-w-450 mx-auto">
+        <ul className="flex items-center font-poppins gap-1 p-1.5 bg-[#F7F6F2] rounded-lg">
           {Links.map(({ label, key, ref }) => {
             const isActive = pathname === ref;
             return (
@@ -56,7 +56,7 @@ export default function NavBar() {
           </div>
           <Link
             href={"/contact-us"}
-            className="inline-flex items-center gap-5 px-6 py-4 bg-[#243D35] text-lg rounded-md text-white"
+            className="inline-flex items-center font-poppins gap-5 px-6 py-4 bg-[#243D35] text-lg rounded-md text-white"
           >
             Contact Us
             <svg

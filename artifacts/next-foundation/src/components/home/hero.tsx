@@ -5,7 +5,7 @@ export default function Hero() {
     <section>
       <div className="rounded-t-md pt-5 overflow-hidden">
         <div className="flex justify-between">
-          <p className="w-90 text-2xl leading-tight text-[#243D35]">
+          <p className="w-90 font-poppins text-2xl leading-tight text-[#243D35]">
             Discover thoughtfully designed homes and make every space reflect
             your style, before you even move in
           </p>
@@ -13,7 +13,7 @@ export default function Hero() {
           <div className="w-40" aria-hidden="true" />
         </div>
 
-        <h1 className="text-right pr-3 -mt-20 text-[17vw] font-medium leading-[0.85] tracking-tighter text-[#243D35] select-none">
+        <h1 className="select-none text-right text-[22vw] font-semibold leading-[0.85] tracking-tighter text-[#243D35] md:text-[18vw] lg:text-[15vw] ">
           HueEstate
         </h1>
       </div>

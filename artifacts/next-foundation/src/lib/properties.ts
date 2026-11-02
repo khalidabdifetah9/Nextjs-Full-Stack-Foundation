@@ -24,8 +24,8 @@ export const featuredProperties: Property[] = [
     description:
       "An architectural masterpiece featuring open-plan living spaces and crisp white interior walls designed for custom color layering.",
     price: "$450,000",
-    src: "/minimalist.jpg",
-    alt: "/minimalist haven property image",
+    src: "/properties/property-1.jpg",
+    alt: "minimalist haven property image",
     location: "Addis Ababa, Ayat",
     features: {
       bedrooms: 3,
@@ -33,7 +33,7 @@ export const featuredProperties: Property[] = [
       kitchens: 1,
       sqft: 2400,
     },
-    image: "/properties/property-1.png",
+    image: "/properties/property-1.jpg",
   },
   {
     id: "prop-2",
@@ -42,8 +42,8 @@ export const featuredProperties: Property[] = [
     description:
       "Bathed in natural daylight with expansive floor-to-ceiling windows, offering a blank canvas for warm earthy tones and modern wood accents.",
     price: "$580,000",
-    src: "/scandinavian.jpg",
-    alt: "/scandinavian property image",
+    src: "/properties/property-2.jpg",
+    alt: "Scandinavian property image",
     location: "Addis Ababa, Bole",
     features: {
       bedrooms: 4,
@@ -51,7 +51,7 @@ export const featuredProperties: Property[] = [
       kitchens: 1,
       sqft: 3100,
     },
-    image: "/properties/property-2.png",
+    image: "/properties/property-2.jpg",
   },
   {
     id: "prop-3",
@@ -60,8 +60,8 @@ export const featuredProperties: Property[] = [
     description:
       "Sleek lines and high ceilings optimized for dynamic interior lighting setups and sophisticated palette personalization.",
     price: "$620,000",
-    src: "/Aurora.jpg",
-    alt: "/Aurora property image",
+    src: "/properties/property-3.jpg",
+    alt: "Aurora property image",
     location: "Addis Ababa, CMC",
     features: {
       bedrooms: 3,
@@ -69,7 +69,7 @@ export const featuredProperties: Property[] = [
       kitchens: 2,
       sqft: 2850,
     },
-    image: "/properties/property-3.png",
+    image: "/properties/property-3.jpg",
   },
 ];
 
