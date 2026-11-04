@@ -46,13 +46,11 @@ export default function SignUp() {
   }
 
   function handleGoogle() {
-    // e.g. next-auth: signIn("google")
     console.log("Google sign up");
   }
 
   return (
-    <section className="grid min-h-screen font-poppins lg:grid-cols-2">
-      {/* Image side */}
+    <section className="grid max-h-screen font-poppins lg:grid-cols-2">
       <div className="relative h-56 sm:h-72 lg:h-auto">
         <Image
           src="/register_img.png"
@@ -63,7 +61,7 @@ export default function SignUp() {
           className="object-cover"
         />
       
-        <div className="absolute inset-x-0 bottom-0 p-6 text-[#F7F6F2] md:p-12">
+        <div className="absolute inset-x-0 bottom-6 p-6 text-[#F7F6F2] md:p-12">
           <h2 className="text-2xl font-semibold leading-tight sm:text-3xl lg:text-5xl">
             Design your dream space today
           </h2>
@@ -73,8 +71,7 @@ export default function SignUp() {
         </div>
       </div>
 
-      {/* Form side */}
-      <div className="flex items-center justify-center bg-[#F7F6F2] px-4 py-10 sm:px-8 md:py-16">
+      <div className="flex items-center justify-center bg-[#F7F6F2] py-10 md:pb-0 px-4 sm:px-8 md:pt-[38.5px]">
         <div className="w-full max-w-md">
           <h1 className="text-3xl font-semibold text-[#243D35] md:text-4xl">
             Create your account

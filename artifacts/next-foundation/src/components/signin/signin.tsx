@@ -45,7 +45,7 @@ export default function SignIn() {
   }
 
   return (
-    <section className="flex min-h-[calc(100vh-5rem)] items-center justify-center bg-[#F7F6F2] px-4 py-10 font-poppins sm:py-16">
+    <section className="flex min-h-screen items-center justify-center bg-[#F7F6F2] px-4 py-10 font-poppins sm:py-16">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-sm sm:p-10">
         <h1 className="text-3xl font-semibold text-[#243D35] md:text-4xl">
           Welcome back
