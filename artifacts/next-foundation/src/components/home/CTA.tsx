@@ -17,7 +17,6 @@ export default function CallToAction() {
   return (
     <section className="mt-20 md:mt-32 lg:mt-50 font-poppins">
       <div className="bg-[#243D35] px-4 py-10 sm:px-8 md:py-24">
-        {/* Frame with fading corner brackets */}
         <div className="relative mx-auto max-w-5xl px-6 py-14 sm:px-12 md:px-20 md:py-24">
           {corners.map((corner) => (
             <span
@@ -28,7 +27,6 @@ export default function CallToAction() {
           ))}
 
           <div className="flex flex-col items-center text-center">
-            {/* Badge */}
             <div className="inline-flex items-center gap-3 rounded-lg border border-[#F7F6F2]/30 py-1.5 pl-2 pr-4">
               <div className="flex -space-x-2">
                 {avatars.map((a) => (
@@ -48,14 +46,12 @@ export default function CallToAction() {
               </span>
             </div>
 
-            {/* Heading */}
             <h2 className="mt-8 max-w-4xl text-3xl font-semibold leading-tight text-[#F7F6F2] sm:text-5xl lg:text-6xl md:mt-12">
               Ready to <span className="text-[#F7F6F2]/45">find your space?</span>{" "}
               Get your <br className="hidden md:block" />
               Custom <span className="text-[#F7F6F2]/45">Design Roadmap</span>
             </h2>
 
-            {/* Description */}
             <p className="mt-5 max-w-xl text-base text-[#F7F6F2]/85 sm:text-lg md:mt-6">
               Receive tailored room palettes, layout suggestions, and clear
               next steps for your home, without unnecessary fluff.
@@ -63,7 +59,7 @@ export default function CallToAction() {
 
             {/* Button */}
             <Link
-              href="/get-started"
+              href="/register"
               className="mt-8 inline-block rounded-md bg-[#F7F6F2] px-8 py-4 text-sm font-medium uppercase tracking-wide text-[#243D35] transition-all duration-300 hover:bg-white hover:scale-[1.03] md:mt-10"
             >
               Get Started

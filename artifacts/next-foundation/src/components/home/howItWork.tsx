@@ -4,7 +4,7 @@ import { howItWorksSection } from "@/lib/howItWorks";
 
 export default function HowItWorks() {
   return (
-    <section className="mt-20 md:mt-32 lg:mt-50">
+    <section id="how-it-works" className="mt-20 scroll-mt-24 md:mt-32 lg:mt-50">
       <header className="space-y-4 md:space-y-6 max-w-300 mx-auto text-center mb-10 md:mb-20">
         <h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-[4vw] text-[#243D35]">
           Designing Your Dream Space is Simple

@@ -3,7 +3,7 @@ import FeaturedProperties from "@/components/home/FeaturedProperties";
 import HowItWorks from "@/components/home/howItWork";
 import IntelligentStudio from "@/components/home/AIIntro";
 import CallToAction from "@/components/home/CTA";
-import Footer from "@/components";
+import Footer from "@/components/shared/footer";
 import NavBar from "@/components/shared/navbar";
 export default function HomePage() {
   return (

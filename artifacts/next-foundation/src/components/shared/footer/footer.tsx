@@ -7,7 +7,7 @@ const linkGroups = [
     links: [
       { label: "Home", href: "/" },
       { label: "About", href: "/about" },
-      { label: "Get Started", href: "/get-started" },
+      { label: "Get Started", href: "/register" },
       { label: "Sign In", href: "/signin" },
       { label: "Contact Us", href: "/contact-us" },
     ],
@@ -55,7 +55,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-[#243D35] font-poppins text-[#F7F6F2]">
+    <footer className="relative px-3 overflow-hidden bg-[#243D35] font-poppins text-[#F7F6F2]">
       <Image
         src="/footer_bg.png"
         alt=""
@@ -68,12 +68,11 @@ export default function Footer() {
         className="absolute inset-0 bg-linear-to-b from-[#243D35]/70 via-[#243D35]/80 to-[#243D35]"
       />
 
-      <div className="relative mx-auto max-w-450 px-4 pt-16 md:px-12 md:pt-24">
-        {/* Top: giant wordmark + description */}
+      <div className="relative  mx-auto max-w-450 pt-16 md:pt-24">
         <div>
           <p
             aria-hidden="true"
-            className="select-none text-[22vw] font-semibold leading-[0.85] tracking-tighter text-[#F7F6F2] md:text-[18vw] lg:text-[15vw]"
+            className="select-none pr-3 text-[19vw] font-semibold leading-[0.85] tracking-tighter text-[#F7F6F2] md:text-[18vw] lg:text-[15vw]"
           >
             HueEstate
           </p>

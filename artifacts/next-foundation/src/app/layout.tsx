@@ -10,16 +10,15 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Foundation",
-  description: "A minimal Next.js App Router foundation.",
+  title: "HueEstate",
+  description:
+    "Discover thoughtfully designed luxury homes and visualize interior room colors, lighting, and textures in real time before you move in.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={poppins.variable}>
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

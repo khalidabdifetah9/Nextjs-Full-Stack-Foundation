@@ -27,7 +27,7 @@ const faqs = [
 
 export default function Faq() {
   return (
-    <section id="faq" className="mt-20 md:mt-22 lg:mt-30 font-poppins">
+    <section id="faq" className="my-20 md:my-22 lg:my-30 font-poppins">
       <header className="mb-10 max-w-2xl space-y-4 md:mb-16 md:space-y-6">
         <h2 className="text-3xl font-semibold leading-tight text-[#243D35] sm:text-4xl lg:text-5xl">
           Questions, answered

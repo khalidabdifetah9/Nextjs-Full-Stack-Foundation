@@ -13,7 +13,7 @@ const cards = [
 
 export default function IntelligentStudio() {
   return (
-    <section className="mt-20 md:mt-32 lg:mt-50  font-poppins">
+    <section id="studio" className="mt-20 scroll-mt-30 md:mt-32 lg:mt-50  font-poppins">
       <div className="grid gap-8 lg:grid-cols-[2fr_1fr] lg:gap-12">
         <div className="flex flex-col gap-10 lg:justify-between lg:gap-16">
           <div className="grid gap-4 lg:grid-cols-[1fr_2fr] lg:gap-8">

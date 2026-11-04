@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function FeaturedProperties() {
   return (
-    <section className="mt-20 md:mt-32 lg:mt-50">
+    <section id="properties" className="mt-20 scroll-mt-24 md:mt-32 lg:mt-50">
       <header className="space-y-4 md:space-y-6 max-w-300 mx-auto text-center mb-10 md:mb-20 px-4">
         <h2 className="font-bold leading-tighter text-3xl sm:text-4xl lg:text-[4vw] text-[#243D35]">
           Architectures Ready For Your Touch
