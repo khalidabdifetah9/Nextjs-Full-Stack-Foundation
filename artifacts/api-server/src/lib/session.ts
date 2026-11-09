@@ -16,12 +16,10 @@ export type SessionAccount = {
   id: string;
   fullName: string;
   email: string;
-  emailVerifiedAt: Date | null;
 };
 
 export type SessionAccess =
   | { kind: "unauthenticated" }
-  | { kind: "email-unverified" }
   | {
       kind: "authenticated";
       user: Pick<SessionAccount, "id" | "fullName" | "email">;
@@ -140,10 +138,6 @@ export async function resolveSessionAccess(
   const account = await findAccount(claims.sub);
   if (!account) {
     return { kind: "unauthenticated" };
-  }
-
-  if (!account.emailVerifiedAt) {
-    return { kind: "email-unverified" };
   }
 
   return {

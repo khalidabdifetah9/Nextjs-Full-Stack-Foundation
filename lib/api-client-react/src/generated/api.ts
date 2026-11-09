@@ -143,7 +143,7 @@ export const getRegisterUserUrl = () => {
 }
 
 /**
- * Creates an email-and-password account and returns its public profile.
+ * Creates an email-and-password account, starts a session, and returns its public profile.
  * @summary Create an account
  */
 export const registerUser = async (registerUserRequest: RegisterUserRequest, options?: Parameters<typeof customFetch>[1]): Promise<CreatedUserProfile> => {
@@ -321,7 +321,7 @@ export const getGetCurrentSessionUrl = () => {
 }
 
 /**
- * Checks the session cookie and current account, and only returns a user with a verified email.
+ * Checks the session cookie and current account.
  * @summary Validate the current session
  */
 export const getCurrentSession = async ( options?: Parameters<typeof customFetch>[1]): Promise<CurrentSessionResponse> => {

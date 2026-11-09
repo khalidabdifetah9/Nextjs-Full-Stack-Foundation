@@ -3,7 +3,7 @@ export type DashboardSessionResponse = {
   ok: boolean;
 };
 
-export async function requireVerifiedDashboardSession(
+export async function requireDashboardSession(
   validateSession: () => Promise<DashboardSessionResponse>,
   redirectTo: (path: string) => never,
 ): Promise<void> {
@@ -11,10 +11,6 @@ export async function requireVerifiedDashboardSession(
 
   if (response.status === 401) {
     redirectTo("/signin");
-  }
-
-  if (response.status === 403) {
-    redirectTo("/verify-email");
   }
 
   if (!response.ok) {

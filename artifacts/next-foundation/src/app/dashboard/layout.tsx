@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import DashboardShell from "@/components/dashboard/main/DashboardShell";
-import { requireVerifiedDashboardSession } from "@/lib/dashboard-auth";
+import { requireDashboardSession } from "@/lib/dashboard-auth";
 
 async function validateCurrentSession(): Promise<Response> {
   const requestHeaders = await headers();
@@ -29,6 +29,6 @@ export default async function DashboardLayout({
 }: {
   children: ReactNode;
 }) {
-  await requireVerifiedDashboardSession(validateCurrentSession, redirect);
+  await requireDashboardSession(validateCurrentSession, redirect);
   return <DashboardShell>{children}</DashboardShell>;
 }

@@ -31,7 +31,7 @@ paths:
       operationId: registerUser
       tags: [authentication]
       summary: Create an account
-      description: Creates an email-and-password account and returns its public profile.
+      description: Creates an email-and-password account, starts a session, and returns its public profile.
       requestBody:
         required: true
         content:
@@ -40,7 +40,7 @@ paths:
               $ref: "#/components/schemas/RegisterUserRequest"
       responses:
         "201":
-          description: Account created
+          description: Account created and signed in
           content:
             application/json:
               schema:
@@ -105,22 +105,16 @@ paths:
       operationId: getCurrentSession
       tags: [authentication]
       summary: Validate the current session
-      description: Checks the session cookie and current account, and only returns a user with a verified email.
+      description: Checks the session cookie and current account.
       responses:
         "200":
-          description: A valid session for a verified account
+          description: A valid session for an existing account
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CurrentSessionResponse"
         "401":
           description: The session is missing, invalid, expired, or belongs to a deleted account
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: The account's email has not been verified
           content:
             application/json:
               schema:

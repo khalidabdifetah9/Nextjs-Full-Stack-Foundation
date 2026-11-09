@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { Router, type IRouter } from "express";
 import { logger } from "../lib/logger";
 import { hashPassword } from "../lib/password";
+import { createSessionToken, SESSION_COOKIE_NAME } from "../lib/session";
 
 const router: IRouter = Router();
 
@@ -123,7 +124,14 @@ router.post("/auth/register", async (req, res) => {
       });
 
     const response = RegisterUserResponse.parse(createdUser);
-    return res.status(201).json(response);
+    const session = createSessionToken(createdUser.id, false);
+    res.cookie(SESSION_COOKIE_NAME, session.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+    res.status(201).json(response);
   } catch (error) {
     if (isUniqueViolation(error, "users_email_unique")) {
       return res

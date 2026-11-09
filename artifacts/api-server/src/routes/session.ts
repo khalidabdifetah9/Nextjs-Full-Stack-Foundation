@@ -16,7 +16,6 @@ router.get("/auth/session", async (req, res): Promise<void> => {
             id: users.id,
             fullName: users.fullName,
             email: users.email,
-            emailVerifiedAt: users.emailVerifiedAt,
           })
           .from(users)
           .where(eq(users.id, userId))
@@ -27,11 +26,6 @@ router.get("/auth/session", async (req, res): Promise<void> => {
 
     if (access.kind === "unauthenticated") {
       res.status(401).json({ error: "Sign in is required." });
-      return;
-    }
-
-    if (access.kind === "email-unverified") {
-      res.status(403).json({ error: "Verify your email to continue." });
       return;
     }
 

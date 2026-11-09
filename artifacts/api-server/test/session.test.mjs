@@ -6,11 +6,10 @@ import {
   verifySessionToken,
 } from "../src/lib/session.ts";
 
-const verifiedAccount = {
+const account = {
   id: "4d31e4f1-7fa8-4606-a1ab-c44b39174f04",
   fullName: "Taylor User",
   email: "taylor@example.com",
-  emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
 };
 
 before(() => {
@@ -19,7 +18,7 @@ before(() => {
 });
 
 function newSession() {
-  return createSessionToken(verifiedAccount.id, false).token;
+  return createSessionToken(account.id, false).token;
 }
 
 describe("session access", () => {
@@ -27,7 +26,7 @@ describe("session access", () => {
     let lookedUp = false;
     const result = await resolveSessionAccess(undefined, async () => {
       lookedUp = true;
-      return verifiedAccount;
+      return account;
     });
 
     assert.deepEqual(result, { kind: "unauthenticated" });
@@ -53,7 +52,7 @@ describe("session access", () => {
       token,
       async () => {
         lookedUp = true;
-        return verifiedAccount;
+        return account;
       },
       claims.exp,
     );
@@ -62,27 +61,34 @@ describe("session access", () => {
     assert.equal(lookedUp, false);
   });
 
-  it("requires email verification for a valid session", async () => {
+  it("allows a valid session even when a legacy account is unverified", async () => {
     const result = await resolveSessionAccess(newSession(), async () => ({
-      ...verifiedAccount,
+      ...account,
       emailVerifiedAt: null,
     }));
 
-    assert.deepEqual(result, { kind: "email-unverified" });
+    assert.deepEqual(result, {
+      kind: "authenticated",
+      user: {
+        id: account.id,
+        fullName: account.fullName,
+        email: account.email,
+      },
+    });
   });
 
-  it("allows a verified account with a valid session", async () => {
+  it("allows an existing account with a valid session", async () => {
     const result = await resolveSessionAccess(
       newSession(),
-      async () => verifiedAccount,
+      async () => account,
     );
 
     assert.deepEqual(result, {
       kind: "authenticated",
       user: {
-        id: verifiedAccount.id,
-        fullName: verifiedAccount.fullName,
-        email: verifiedAccount.email,
+        id: account.id,
+        fullName: account.fullName,
+        email: account.email,
       },
     });
   });

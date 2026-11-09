@@ -18,7 +18,7 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
- * Creates an email-and-password account and returns its public profile.
+ * Creates an email-and-password account, starts a session, and returns its public profile.
  * @summary Create an account
  */
 export const registerUserBodyFullNameMax = 200;
@@ -73,7 +73,7 @@ export const SignInUserResponse = zod.object({
 
 
 /**
- * Checks the session cookie and current account, and only returns a user with a verified email.
+ * Checks the session cookie and current account.
  * @summary Validate the current session
  */
 export const GetCurrentSessionResponse = zod.object({

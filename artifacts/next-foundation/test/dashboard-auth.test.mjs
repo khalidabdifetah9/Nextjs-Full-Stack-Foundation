@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import { describe, it } from "node:test";
-import { requireVerifiedDashboardSession } from "../src/lib/dashboard-auth.ts";
+import { requireDashboardSession } from "../src/lib/dashboard-auth.ts";
 
 const dashboardDirectory = new URL("../src/app/dashboard/", import.meta.url);
 
@@ -18,7 +18,7 @@ describe("dashboard session guard", () => {
       "utf8",
     );
 
-    assert.match(layout, /requireVerifiedDashboardSession/);
+    assert.match(layout, /requireDashboardSession/);
     for (const page of ["page.tsx", "schedule/page.tsx"]) {
       await access(new URL(page, dashboardDirectory));
     }
@@ -26,7 +26,7 @@ describe("dashboard session guard", () => {
 
   it("redirects missing, invalid, and expired sessions to sign in", async () => {
     await assert.rejects(
-      requireVerifiedDashboardSession(
+      requireDashboardSession(
         async () => ({ status: 401, ok: false }),
         createRedirect(),
       ),
@@ -34,26 +34,26 @@ describe("dashboard session guard", () => {
     );
   });
 
-  it("redirects a valid session with an unverified email to instructions", async () => {
+  it("does not send users to email verification for an active session", async () => {
     await assert.rejects(
-      requireVerifiedDashboardSession(
+      requireDashboardSession(
         async () => ({ status: 403, ok: false }),
         createRedirect(),
       ),
-      /REDIRECT:\/verify-email/,
+      /Unable to validate dashboard session/,
     );
   });
 
-  it("allows a verified session and fails closed on API errors", async () => {
+  it("allows an active session and fails closed on API errors", async () => {
     await assert.doesNotReject(
-      requireVerifiedDashboardSession(
+      requireDashboardSession(
         async () => ({ status: 200, ok: true }),
         createRedirect(),
       ),
     );
 
     await assert.rejects(
-      requireVerifiedDashboardSession(
+      requireDashboardSession(
         async () => ({ status: 500, ok: false }),
         createRedirect(),
       ),

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import BackButton from "@/components/ui/back_button";
 
 const rules = [
@@ -41,10 +42,10 @@ const inputClass =
   "w-full rounded-md border border-[#243D35]/20 bg-white px-4 py-3.5 text-base text-[#243D35] placeholder:text-[#243D35]/40 outline-none transition focus:border-[#243D35] focus:ring-2 focus:ring-[#243D35]/15";
 
 export default function SignUp() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const score = useMemo(
@@ -60,7 +61,6 @@ export default function SignUp() {
       return;
     }
     setError("");
-    setSuccess(false);
 
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -95,7 +95,7 @@ export default function SignUp() {
 
       form.reset();
       setPassword("");
-      setSuccess(true);
+      router.replace("/dashboard");
     } catch {
       setError("Unable to reach the server. Please try again.");
     } finally {
@@ -358,19 +358,10 @@ export default function SignUp() {
               </p>
             )}
 
-            {success && (
-              <p
-                role="status"
-                className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
-              >
-                Your account has been created.
-              </p>
-            )}
-
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-md bg-[#243D35] px-6 py-4 text-base font-medium text-white transition hover:bg-[#1a2d27] active:scale-[0.99]"
+              className="w-full cursor-pointer rounded-md bg-[#243D35] px-6 py-4 text-base font-medium text-white transition hover:bg-[#1a2d27] active:scale-[0.99]"
             >
               {isSubmitting ? "Creating account…" : "Create account"}
             </button>
