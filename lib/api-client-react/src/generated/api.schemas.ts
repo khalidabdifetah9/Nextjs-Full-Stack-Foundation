@@ -59,6 +59,10 @@ export interface SignInResponse {
   user: SignInUserProfile;
 }
 
+export interface CurrentSessionResponse {
+  user: SignInUserProfile;
+}
+
 export type ErrorResponseIssuesItem = {
   path: string;
   message: string;

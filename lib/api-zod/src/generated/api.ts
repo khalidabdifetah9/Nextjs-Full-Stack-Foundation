@@ -72,3 +72,16 @@ export const SignInUserResponse = zod.object({
 })
 
 
+/**
+ * Checks the session cookie and current account, and only returns a user with a verified email.
+ * @summary Validate the current session
+ */
+export const GetCurrentSessionResponse = zod.object({
+  "user": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "email": zod.string().email()
+})
+})
+
+

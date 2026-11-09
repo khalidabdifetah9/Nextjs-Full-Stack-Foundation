@@ -100,6 +100,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /auth/session:
+    get:
+      operationId: getCurrentSession
+      tags: [authentication]
+      summary: Validate the current session
+      description: Checks the session cookie and current account, and only returns a user with a verified email.
+      responses:
+        "200":
+          description: A valid session for a verified account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentSessionResponse"
+        "401":
+          description: The session is missing, invalid, expired, or belongs to a deleted account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: The account's email has not been verified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: The session could not be validated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -189,6 +220,14 @@ components:
         - fullName
         - email
     SignInResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        user:
+          $ref: "#/components/schemas/SignInUserProfile"
+      required:
+        - user
+    CurrentSessionResponse:
       type: object
       additionalProperties: false
       properties:

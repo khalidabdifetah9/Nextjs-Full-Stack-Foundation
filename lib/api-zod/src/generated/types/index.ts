@@ -7,6 +7,7 @@
  */
 
 export * from './createdUserProfile';
+export * from './currentSessionResponse';
 export * from './errorResponse';
 export * from './errorResponseIssuesItem';
 export * from './healthStatus';
