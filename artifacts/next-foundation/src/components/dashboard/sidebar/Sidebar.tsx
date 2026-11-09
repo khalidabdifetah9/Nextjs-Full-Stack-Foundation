@@ -9,6 +9,7 @@ interface NavItem {
   key: string;
   label: string;
   href: string;
+  act:string;
   icon: ReactNode;
   soon?: boolean;
 }
@@ -29,7 +30,8 @@ const items: NavItem[] = [
   {
     key: "preview",
     label: "Preview Room",
-    href: "/dashboard/preview",
+    href: "/dashboard",
+    act:"dashboard",
     icon: (
       <svg {...ic}>
         <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
@@ -41,7 +43,7 @@ const items: NavItem[] = [
     key: "schedule",
     label: "Make a Schedule",
     href: "/dashboard/schedule",
-    soon: true,
+    act:"schedule",
     icon: (
       <svg {...ic}>
         <rect x="3" y="5" width="18" height="16" rx="2" />
@@ -53,23 +55,11 @@ const items: NavItem[] = [
     key: "profile",
     label: "Profile",
     href: "/dashboard/profile",
-    soon: true,
+    act:"profile",
     icon: (
       <svg {...ic}>
         <circle cx="12" cy="8" r="4" />
         <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
-      </svg>
-    ),
-  },
-  {
-    key: "ai",
-    label: "AI",
-    href: "/dashboard/ai",
-    soon: true,
-    icon: (
-      <svg {...ic}>
-        <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" />
-        <path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" />
       </svg>
     ),
   },
@@ -161,10 +151,10 @@ export default function Sidebar({
       </div>
 
       {/* Navigation */}
-      <nav aria-label="Dashboard" className="flex-1 px-3 py-4">
+      <nav aria-label="Dashboard" className="flex-1 md:mt-15 px-3 py-4">
         <ul className="space-y-1.5">
           {items.map((item) => {
-            const active = pathname.startsWith(item.href);
+            const active = pathname?.endsWith(item.act);
 
             if (item.soon) {
               return (
