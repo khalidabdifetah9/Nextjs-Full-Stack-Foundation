@@ -44,6 +44,8 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const score = useMemo(
     () => rules.filter((r) => r.test(password)).length,
@@ -51,15 +53,54 @@ export default function SignUp() {
   );
   const level = levels[password ? score : 0];
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (score < 3) {
       setError("Please choose a stronger password (at least “Good”).");
       return;
     }
     setError("");
-    const data = new FormData(e.currentTarget);
-    console.log(Object.fromEntries(data)); // replace with your API call
+    setSuccess(false);
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const phone = String(data.get("phone") ?? "").trim();
+    const payload = {
+      fullName: String(data.get("fullName") ?? "").trim(),
+      ...(phone ? { phone } : {}),
+      email: String(data.get("email") ?? "").trim(),
+      password: String(data.get("password") ?? ""),
+    };
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result: unknown = await response.json().catch(() => null);
+      const serverError =
+        result &&
+        typeof result === "object" &&
+        "error" in result &&
+        typeof result.error === "string"
+          ? result.error
+          : null;
+
+      if (!response.ok) {
+        setError(serverError ?? "Unable to create account. Please try again.");
+        return;
+      }
+
+      form.reset();
+      setPassword("");
+      setSuccess(true);
+    } catch {
+      setError("Unable to reach the server. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function handleGoogle() {
@@ -317,11 +358,21 @@ export default function SignUp() {
               </p>
             )}
 
+            {success && (
+              <p
+                role="status"
+                className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+              >
+                Your account has been created.
+              </p>
+            )}
+
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full rounded-md bg-[#243D35] px-6 py-4 text-base font-medium text-white transition hover:bg-[#1a2d27] active:scale-[0.99]"
             >
-              Create account
+              {isSubmitting ? "Creating account…" : "Create account"}
             </button>
 
             <p className="text-center text-sm text-[#243D35]/60">
