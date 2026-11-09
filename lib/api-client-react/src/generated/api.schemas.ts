@@ -38,6 +38,27 @@ export interface CreatedUserProfile {
   createdAt: string;
 }
 
+export interface SignInRequest {
+  /** @maxLength 254 */
+  email: string;
+  /**
+     * @minLength 1
+     * @maxLength 128
+     */
+  password: string;
+  rememberMe?: boolean;
+}
+
+export interface SignInUserProfile {
+  id: string;
+  fullName: string;
+  email: string;
+}
+
+export interface SignInResponse {
+  user: SignInUserProfile;
+}
+
 export type ErrorResponseIssuesItem = {
   path: string;
   message: string;

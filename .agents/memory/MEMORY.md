@@ -1,1 +1,2 @@
 - [Next.js Replit workflow](next-replit-workflow.md) — use Next server commands in the managed artifact and allow the runtime Replit dev hostname for HMR.
+- [Development database bootstrap](development-database-bootstrap.md) — a configured database can still be empty; verify the development schema before debugging database-backed routes.

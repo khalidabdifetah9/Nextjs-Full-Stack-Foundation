@@ -47,3 +47,28 @@ export const RegisterUserResponse = zod.object({
 })
 
 
+/**
+ * Verifies an email-and-password account and sets a signed session cookie.
+ * @summary Sign in to an account
+ */
+export const signInUserBodyEmailMax = 254;
+
+export const signInUserBodyPasswordMax = 128;
+
+
+
+export const SignInUserBody = zod.object({
+  "email": zod.string().email().max(signInUserBodyEmailMax),
+  "password": zod.string().min(1).max(signInUserBodyPasswordMax),
+  "rememberMe": zod.boolean().optional()
+})
+
+export const SignInUserResponse = zod.object({
+  "user": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "email": zod.string().email()
+})
+})
+
+

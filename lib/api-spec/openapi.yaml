@@ -63,6 +63,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /auth/signin:
+    post:
+      operationId: signInUser
+      tags: [authentication]
+      summary: Sign in to an account
+      description: Verifies an email-and-password account and sets a signed session cookie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignInRequest"
+      responses:
+        "200":
+          description: Signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignInResponse"
+        "400":
+          description: The request is invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: The email or password is incorrect
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: The account could not be signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -118,6 +155,47 @@ components:
         - fullName
         - email
         - createdAt
+    SignInRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          minLength: 1
+          maxLength: 128
+        rememberMe:
+          type: boolean
+      required:
+        - email
+        - password
+    SignInUserProfile:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+      required:
+        - id
+        - fullName
+        - email
+    SignInResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        user:
+          $ref: "#/components/schemas/SignInUserProfile"
+      required:
+        - user
     ErrorResponse:
       type: object
       additionalProperties: false

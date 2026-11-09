@@ -1,4 +1,8 @@
-import { randomBytes, scrypt as scryptCallback } from "node:crypto";
+import {
+  randomBytes,
+  scrypt as scryptCallback,
+  timingSafeEqual,
+} from "node:crypto";
 
 const KEY_LENGTH = 64;
 const COST = 32_768;
@@ -42,4 +46,60 @@ export async function hashPassword(password: string): Promise<string> {
     salt.toString("base64url"),
     key.toString("base64url"),
   ].join("$");
+}
+
+type ParsedPasswordHash = {
+  salt: Buffer;
+  key: Buffer;
+};
+
+function parsePasswordHash(encoded: string): ParsedPasswordHash | null {
+  const parts = encoded.split("$");
+  if (parts.length !== 6) {
+    return null;
+  }
+
+  const [algorithm, cost, blockSize, parallelization, saltText, keyText] =
+    parts;
+  if (
+    algorithm !== "scrypt" ||
+    cost !== String(COST) ||
+    blockSize !== String(BLOCK_SIZE) ||
+    parallelization !== String(PARALLELIZATION) ||
+    !/^[A-Za-z0-9_-]+$/.test(saltText) ||
+    !/^[A-Za-z0-9_-]+$/.test(keyText)
+  ) {
+    return null;
+  }
+
+  const salt = Buffer.from(saltText, "base64url");
+  const key = Buffer.from(keyText, "base64url");
+  if (salt.length !== 16 || key.length !== KEY_LENGTH) {
+    return null;
+  }
+
+  return { salt, key };
+}
+
+// Use the same scrypt work for unknown accounts and accounts without a
+// password, so their sign-in responses don't reveal account existence.
+const DUMMY_PASSWORD_HASH = hashPassword("sign-in-timing-equalization");
+
+export async function verifyPassword(
+  password: string,
+  encodedHash: string | null | undefined,
+): Promise<boolean> {
+  const dummyHash = parsePasswordHash(await DUMMY_PASSWORD_HASH);
+  if (!dummyHash) {
+    throw new Error("Unable to initialize password verification.");
+  }
+
+  const parsedHash = encodedHash
+    ? parsePasswordHash(encodedHash)
+    : null;
+  const hashToCheck = parsedHash ?? dummyHash;
+  const candidate = await deriveKey(password, hashToCheck.salt);
+  const matches = timingSafeEqual(candidate, hashToCheck.key);
+
+  return parsedHash !== null && matches;
 }

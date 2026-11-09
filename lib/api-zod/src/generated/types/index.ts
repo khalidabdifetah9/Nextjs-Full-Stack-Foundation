@@ -11,3 +11,6 @@ export * from './errorResponse';
 export * from './errorResponseIssuesItem';
 export * from './healthStatus';
 export * from './registerUserRequest';
+export * from './signInRequest';
+export * from './signInResponse';
+export * from './signInUserProfile';
