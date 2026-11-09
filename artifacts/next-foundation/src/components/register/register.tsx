@@ -145,11 +145,10 @@ export default function SignUp() {
             </Link>
           </p>
 
-          {/* Google */}
           <button
             type="button"
             onClick={handleGoogle}
-            className="mt-8 flex w-full items-center justify-center gap-3 rounded-md border border-[#243D35]/20 bg-white px-4 py-3.5 text-base font-medium text-[#243D35] transition hover:bg-[#243D35] hover:text-white"
+            className="mt-8 flex cursor-pointer w-full items-center justify-center gap-3 rounded-md border border-[#243D35]/20 bg-white px-4 py-3.5 text-base font-medium text-[#243D35] transition hover:bg-[#243D35] hover:text-white"
           >
             <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
               <path
