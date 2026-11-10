@@ -353,11 +353,11 @@ export default function SignUp() {
 
             <p className="text-center text-sm text-[#243D35]/60">
               By signing up you agree to our{" "}
-              <Link href="/terms" className="underline underline-offset-2">
+              <Link href="/terms-services" className="underline underline-offset-2">
                 Terms
               </Link>{" "}
               and{" "}
-              <Link href="/privacy" className="underline underline-offset-2">
+              <Link href="/privacy-policy" className="underline underline-offset-2">
                 Privacy Policy
               </Link>
               .

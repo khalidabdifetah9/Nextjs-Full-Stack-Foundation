@@ -25,7 +25,7 @@ export default function PageNotFound() {
         <h2 className="mt-2 font-poppins text-3xl font-bold capitalize sm:text-4xl md:text-5xl lg:mt-0 lg:text-[3vw]">
           page not found
         </h2>
-        <p className="mb-8 mt-4 max-w-md font-poppins text-base sm:max-w-lg sm:text-lg md:mb-10 md:max-w-xl lg:mt-0 lg:mb-12 lg:max-w-160">
+        <p className="mb-8 mt-4 max-w-md font-poppins text-base sm:max-w-lg sm:text-lg md:mb-10 md:max-w-xl lg:mt-4 lg:mb-12 lg:max-w-160">
           This page didn&apos;t want to leave its house today and honestly, we
           can&apos;t blame it. It&apos;s staying in, drinking coffee, and
           ignoring all incoming requests. Let&apos;s head back before it gets
