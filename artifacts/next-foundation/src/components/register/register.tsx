@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {authClient } from "@/lib/auth-client"
 import BackButton from "@/components/ui/back_button";
 
 const rules = [
@@ -103,8 +104,8 @@ export default function SignUp() {
     }
   }
 
-  function handleGoogle() {
-    console.log("Google sign up");
+  async function handleGoogle() {
+    await authClient.signIn.social({ provider: "google", callbackURL: "/dashboard" });
   }
 
   return (
