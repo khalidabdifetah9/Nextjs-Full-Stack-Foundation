@@ -4,14 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { DASHBOARD_TITLE, getInitials } from "@/lib/user";
+import type { SidebarUser } from "@/lib/user";
 
 interface NavItem {
   key: string;
   label: string;
   href: string;
-  act:string;
+  act: string;
   icon: ReactNode;
-  soon?: boolean;
 }
 
 const ic = {
@@ -31,7 +32,7 @@ const items: NavItem[] = [
     key: "preview",
     label: "Preview Room",
     href: "/dashboard",
-    act:"dashboard",
+    act: "dashboard",
     icon: (
       <svg {...ic}>
         <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
@@ -43,7 +44,7 @@ const items: NavItem[] = [
     key: "schedule",
     label: "Make a Schedule",
     href: "/dashboard/schedule",
-    act:"schedule",
+    act: "schedule",
     icon: (
       <svg {...ic}>
         <rect x="3" y="5" width="18" height="16" rx="2" />
@@ -52,20 +53,32 @@ const items: NavItem[] = [
     ),
   },
   {
-    key: "profile",
-    label: "Profile",
-    href: "/dashboard/profile",
-    act:"profile",
+    key: "activity",
+    label: "My Activities",
+    href: "/dashboard/activity",
+    act: "activity",
     icon: (
       <svg {...ic}>
-        <circle cx="12" cy="8" r="4" />
-        <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
       </svg>
     ),
   },
+  {
+    key: "profile",
+    label: "Profile",
+    href: "/dashboard/profile",
+    act: "profile",
+    icon: (
+      <svg {...ic}>
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  }
 ];
 
 interface SidebarProps {
+  user: SidebarUser;
   collapsed: boolean;
   mobileOpen: boolean;
   onToggle: () => void;
@@ -73,12 +86,15 @@ interface SidebarProps {
 }
 
 export default function Sidebar({
+  user,
   collapsed,
   mobileOpen,
   onToggle,
   onCloseMobile,
 }: SidebarProps) {
   const pathname = usePathname();
+  const onProfile = pathname?.endsWith("profile");
+
   // "collapsed" only applies from lg up. On mobile the drawer is always full.
   const hideWhenCollapsed = collapsed ? "lg:hidden" : "";
   const row = `relative flex items-center gap-4 rounded-xl px-3.5 py-3.5 text-base transition-colors ${
@@ -91,7 +107,6 @@ export default function Sidebar({
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       } ${collapsed ? "lg:w-20" : "lg:w-72"}`}
     >
-      {/* Desktop collapse toggle, floating on the edge */}
       <button
         type="button"
         onClick={onToggle}
@@ -121,7 +136,11 @@ export default function Sidebar({
           collapsed ? "lg:justify-center lg:px-0" : ""
         }`}
       >
-        <Link href="/" aria-label="HueEstate home" className="flex items-center">
+        <Link
+          href="/"
+          aria-label="HueEstate home"
+          className="flex items-center"
+        >
           <Image
             src="/logo.png"
             width={112}
@@ -144,38 +163,58 @@ export default function Sidebar({
           aria-label="Close menu"
           className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F7F6F2] text-[#243D35] lg:hidden"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </button>
       </div>
 
+      <div className="px-3 md:mt-12 mb-3">
+        <Link
+          href="/dashboard/profile"
+          aria-current={onProfile ? "page" : undefined}
+          title={collapsed ? `${user.name} · ${DASHBOARD_TITLE}` : undefined}
+          className={`flex items-center gap-3 rounded-xl p-3 transition-colors ${
+            onProfile ? "bg-[#243D35]/10" : "bg-[#F7F6F2] hover:bg-[#243D35]/10"
+          } ${collapsed ? "lg:justify-center lg:bg-transparent lg:p-0" : ""}`}
+        >
+          {user.image ? (
+            <img
+              src={user.image}
+              alt=""
+              referrerPolicy="no-referrer"
+              className="h-11 w-11 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#243D35] text-sm font-semibold text-white">
+              {getInitials(user.name)}
+            </span>
+          )}
+          <span className={`min-w-0 ${hideWhenCollapsed}`}>
+            <span className="block truncate text-sm font-semibold text-[#243D35]">
+              {user.name}
+            </span>
+            <span className="block truncate text-xs text-[#243D35]/60">
+              {DASHBOARD_TITLE}
+            </span>
+          </span>
+        </Link>
+      </div>
+
       {/* Navigation */}
-      <nav aria-label="Dashboard" className="flex-1 md:mt-15 px-3 py-4">
+      <nav aria-label="Dashboard" className="flex-1 px-3 py-4 md:mt-6">
         <ul className="space-y-1.5">
           {items.map((item) => {
             const active = pathname?.endsWith(item.act);
-
-            if (item.soon) {
-              return (
-                <li key={item.key}>
-                  <span
-                    aria-disabled="true"
-                    title={collapsed ? `${item.label} (soon)` : undefined}
-                    className={`${row} cursor-not-allowed text-[#243D35]/40`}
-                  >
-                    {item.icon}
-                    <span className={`truncate ${hideWhenCollapsed}`}>{item.label}</span>
-                    <span
-                      className={`ml-auto rounded-full bg-[#F7F6F2] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${hideWhenCollapsed}`}
-                    >
-                      Soon
-                    </span>
-                  </span>
-                </li>
-              );
-            }
-
             return (
               <li key={item.key}>
                 <Link
@@ -189,7 +228,9 @@ export default function Sidebar({
                   }`}
                 >
                   {item.icon}
-                  <span className={`truncate ${hideWhenCollapsed}`}>{item.label}</span>
+                  <span className={`truncate ${hideWhenCollapsed}`}>
+                    {item.label}
+                  </span>
                 </Link>
               </li>
             );
@@ -197,17 +238,18 @@ export default function Sidebar({
         </ul>
       </nav>
 
-      {/* Footer */}
+      {/* Help */}
       <div className="border-t border-[#243D35]/10 p-3">
         <Link
-          href="/"
-          title={collapsed ? "Back to website" : undefined}
+          href="/contact-us"
+          title={collapsed ? "Help" : undefined}
           className={`${row} text-[#243D35]/70 hover:bg-[#F7F6F2] hover:text-[#243D35]`}
         >
           <svg {...ic}>
-            <path d="M20 12H4M9 7l-5 5 5 5" />
+            <circle cx="12" cy="12" r="9" />
+            <path d="M9.5 9.5a2.5 2.5 0 114 2c-.8.6-1.5 1-1.5 2M12 17h.01" />
           </svg>
-          <span className={`truncate ${hideWhenCollapsed}`}>Back to website</span>
+          <span className={`truncate ${hideWhenCollapsed}`}>Help</span>
         </Link>
       </div>
     </aside>

@@ -9,5 +9,11 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   if (!session) redirect("/signin");
 
-  return <DashboardShell>{children}</DashboardShell>;
+  const { name, email, image } = session.user;
+
+  return (
+    <DashboardShell user={{ name, email, image: image ?? null }}>
+      {children}
+    </DashboardShell>
+  );
 }

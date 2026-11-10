@@ -1,11 +1,17 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import Sidebar from "@/components/dashboard/sidebar"
+import Sidebar from "@/components/dashboard/sidebar";
+import type { SidebarUser } from "@/lib/user";
 
-export default function DashboardShell({ children }: { children: ReactNode }) {
+export default function DashboardShell({
+  children,
+  user,
+}: {
+  children: ReactNode;
+  user: SidebarUser;
+}) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -24,7 +30,8 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
 
   // Close the mobile drawer with Escape
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileOpen(false);
+    const onKey = (e: KeyboardEvent) =>
+      e.key === "Escape" && setMobileOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -48,6 +55,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
       )}
 
       <Sidebar
+        user={user}
         collapsed={collapsed}
         mobileOpen={mobileOpen}
         onToggle={toggle}
@@ -64,7 +72,16 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
             aria-expanded={mobileOpen}
             className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#F7F6F2]"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
               <path d="M4 8h16M4 16h16" />
             </svg>
           </button>
