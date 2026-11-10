@@ -111,22 +111,20 @@ export default function NavBar() {
           })}
         </ul>
 
-        {/* Logo: left on mobile, centered on desktop */}
         <Link
           href="/"
           aria-label="Home"
           className="xl:absolute xl:left-1/2 xl:-translate-x-1/2"
         >
           <Image
-            src={"/logo.png"}
-            width={120}
-            height={120}
+            src={"/logo.svg"}
+            width={100}
+            height={100}
             alt="Logo"
-            className="h-auto w-24 sm:w-28 xl:w-30"
+            className="h-auto w-24 sm:w-28 xl:w-17"
           />
         </Link>
 
-        {/* Desktop: date + contact */}
         <div className="hidden items-center gap-10 xl:flex">
           <div className="min-w-44 text-lg font-semibold leading-snug text-[#243D35]">
             <p>{today?.day ?? "\u00A0"}</p>
@@ -141,7 +139,6 @@ export default function NavBar() {
           </Link>
         </div>
 
-        {/* Mobile: menu button */}
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
@@ -169,7 +166,6 @@ export default function NavBar() {
         </button>
       </nav>
 
-      {/* Mobile menu panel */}
       <div
         id="mobile-menu"
         aria-hidden={!open}

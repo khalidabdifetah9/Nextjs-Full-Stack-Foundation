@@ -5,7 +5,7 @@ import type { FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client";
 import BackButton from "@/components/ui/back_button";
 
 const rules = [
@@ -65,37 +65,20 @@ export default function SignUp() {
 
     const form = e.currentTarget;
     const data = new FormData(form);
-    const phone = String(data.get("phone") ?? "").trim();
-    const payload = {
-      fullName: String(data.get("fullName") ?? "").trim(),
-      ...(phone ? { phone } : {}),
-      email: String(data.get("email") ?? "").trim(),
-      password: String(data.get("password") ?? ""),
-    };
 
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      const { error } = await authClient.signUp.email({
+        name: String(data.get("fullName")),
+        email: String(data.get("email")).trim().toLowerCase(),
+        password: String(data.get("password")),
+        ...({ phone: String(data.get("phone") ?? "").trim() } as any),
       });
-      const result: unknown = await response.json().catch(() => null);
-      const serverError =
-        result &&
-        typeof result === "object" &&
-        "error" in result &&
-        typeof result.error === "string"
-          ? result.error
-          : null;
 
-      if (!response.ok) {
-        setError(serverError ?? "Unable to create account. Please try again.");
+      if (error) {
+        setError(error.message ?? "Could not create your account.");
         return;
       }
-
-      form.reset();
-      setPassword("");
       router.replace("/dashboard");
     } catch {
       setError("Unable to reach the server. Please try again.");
@@ -105,7 +88,10 @@ export default function SignUp() {
   }
 
   async function handleGoogle() {
-    await authClient.signIn.social({ provider: "google", callbackURL: "/dashboard" });
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
   }
 
   return (
@@ -294,7 +280,6 @@ export default function SignUp() {
                 </button>
               </div>
 
-              {/* Strength meter */}
               <div id="password-strength" aria-live="polite" className="mt-3">
                 <div className="flex gap-1.5">
                   {[1, 2, 3, 4].map((i) => (

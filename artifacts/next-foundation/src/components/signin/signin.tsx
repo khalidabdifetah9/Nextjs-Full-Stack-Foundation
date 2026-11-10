@@ -4,29 +4,10 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const inputClass =
   "w-full rounded-md border border-[#243D35]/20 bg-white px-4 py-3.5 text-base text-[#243D35] placeholder:text-[#243D35]/40 outline-none transition focus:border-[#243D35] focus:ring-2 focus:ring-[#243D35]/15";
-
-function isSignInResponse(
-  value: unknown,
-): value is { user: { id: string; fullName: string; email: string } } {
-  if (!value || typeof value !== "object" || !("user" in value)) {
-    return false;
-  }
-
-  const user = value.user;
-  return (
-    !!user &&
-    typeof user === "object" &&
-    "id" in user &&
-    typeof user.id === "string" &&
-    "fullName" in user &&
-    typeof user.fullName === "string" &&
-    "email" in user &&
-    typeof user.email === "string"
-  );
-}
 
 export default function SignIn() {
   const router = useRouter();
@@ -52,25 +33,15 @@ export default function SignIn() {
     setError("");
     setLoading(true);
     try {
-      const response = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
-        body: JSON.stringify({
-          email,
-          password,
-          rememberMe: data.get("remember") === "on",
-        }),
+      const { error } = await authClient.signIn.email({
+        email: email,
+        password: password,
+        rememberMe: data.get("remember") === "on",
       });
-      const result: unknown = await response.json().catch(() => null);
 
-      if (response.status === 401) {
-        setError("Incorrect email or password. Please try again.");
-        return;
-      }
-
-      if (!response.ok || !isSignInResponse(result)) {
-        setError("Unable to sign in right now. Please try again.");
+      setLoading(false);
+      if (error) {
+        setError(error.message ?? "Incorrect email or password.");
         return;
       }
 
@@ -82,11 +53,12 @@ export default function SignIn() {
     }
   }
 
-  function handleGoogle() {
-    // e.g. next-auth: signIn("google")
-    console.log("Google sign in");
+  async function handleGoogle() {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
   }
-
   return (
     <section className="flex min-h-screen items-center justify-center bg-[#F7F6F2] py-10 font-poppins sm:py-16">
       <BackButton className="inline-flex" />
