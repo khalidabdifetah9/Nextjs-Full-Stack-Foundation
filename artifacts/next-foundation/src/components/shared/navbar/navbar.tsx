@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -49,30 +49,44 @@ const ArrowIcon = () => (
 export default function NavBar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const [today, setToday] = useState<{ day: string; date: string } | null>(
     null
   );
+  const lastY = useRef(0);
 
-  // Today's day + date (set after mount to avoid server/client mismatch)
   useEffect(() => {
     setToday(getToday());
   }, []);
 
-  // Blur background on scroll
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => {
+      const y = Math.max(window.scrollY, 0);
+      setScrolled(y > 10);
+
+      if (y < 80) {
+        setHidden(false);
+        lastY.current = y;
+        return;
+      }
+
+      const diff = y - lastY.current;
+      if (Math.abs(diff) > 8) {
+        setHidden(diff > 0);
+        lastY.current = y;
+      }
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu on navigation
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
-  // Close with Escape
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
@@ -80,17 +94,19 @@ export default function NavBar() {
   }, []);
 
   const showBg = scrolled || open;
+  const hide = hidden && !open;
 
   return (
     <header
       className={`sticky top-0 z-50 px-6 transition-all duration-300 ${
+        hide ? "-translate-y-full" : "translate-y-0"
+      } ${
         showBg
           ? "bg-white/70 shadow-sm backdrop-blur-lg"
           : "bg-transparent"
       }`}
     >
-      <nav className="relative mx-auto flex max-w-450 items-center justify-between py-4 font-poppins xl:py-5">
-        {/* Desktop: link pill */}
+      <nav className="relative mx-auto flex max-w-450 items-center justify-between py-3 font-poppins xl:py-4">
         <ul className="hidden items-center gap-1 rounded-lg bg-[#F7F6F2] p-1.5 xl:flex">
           {Links.map(({ label, key, ref }) => {
             const isActive = pathname === ref;

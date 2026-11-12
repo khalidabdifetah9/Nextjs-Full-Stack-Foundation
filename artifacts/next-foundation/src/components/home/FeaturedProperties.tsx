@@ -1,25 +1,48 @@
+"use client";
+
 import Image from "next/image";
-import featuredProperties from "@/lib/properties";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import featuredProperties from "@/lib/properties";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function FeaturedProperties() {
+  const reduce = useReducedMotion();
+
+  // Fade + gentle rise, triggered once when scrolled into view
+  const reveal = (delay = 0, y = 32) => ({
+    initial: reduce ? false : { opacity: 0, y },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.2 },
+    transition: { duration: 0.8, delay, ease },
+  });
+
   return (
     <section id="properties" className="mt-20 scroll-mt-24 md:mt-32 lg:mt-50">
       <header className="space-y-4 md:space-y-6 max-w-300 mx-auto text-center mb-10 md:mb-20 px-4">
-        <h2 className="font-bold leading-tighter text-3xl sm:text-4xl lg:text-[4vw] text-[#243D35]">
+        <motion.h2
+          {...reveal(0)}
+          className="font-bold leading-tighter text-3xl sm:text-4xl lg:text-[4vw] text-[#243D35]"
+        >
           Architectures Ready For Your Touch
-        </h2>
-        <p className="text-base font-poppins sm:text-xl md:text-2xl text-[#243D35]/80">
+        </motion.h2>
+        <motion.p
+          {...reveal(0.12, 24)}
+          className="text-base font-poppins sm:text-xl md:text-2xl text-[#243D35]/80"
+        >
           Explore white canvas residences engineered for real time interior
           personalization. Select a structure, test custom room palettes, and
           find your ideal space
-        </p>
+        </motion.p>
       </header>
 
       <div className="grid grid-cols-1 font-poppins md:grid-cols-2 gap-x-7 gap-y-10">
-        {featuredProperties.map((properties) => (
-          <div
+        {featuredProperties.map((properties, i) => (
+          <motion.div
             key={properties.id}
+            // Right-hand card in each row follows the left one slightly
+            {...reveal((i % 2) * 0.15, 40)}
             className="flex flex-col space-y-4 md:space-y-5
               md:last:odd:col-span-2
               md:last:odd:justify-self-center
@@ -67,7 +90,7 @@ export default function FeaturedProperties() {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
