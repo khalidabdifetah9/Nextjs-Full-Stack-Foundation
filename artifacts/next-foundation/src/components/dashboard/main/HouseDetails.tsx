@@ -106,7 +106,7 @@ export default function HouseDetails({ house }: { house: House }) {
         />
         <Stat icon="lot" label="Lot size" value={house.lotSize} />
       </div>
-      <Payment status={house.status} />
+      <Payment status={house.status} houseName={house.name} houseId={house.id} />
       <div className="mt-6 border-t border-[#243D35]/10 pt-6">
         <h3 className="text-sm font-semibold">About this home</h3>
         <p className="mt-2 text-sm leading-relaxed text-[#243D35]/70">

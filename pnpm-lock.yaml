@@ -37,7 +37,7 @@ catalogs:
       specifier: ^2.1.1
       version: 2.1.1
     drizzle-orm:
-      specifier: ^0.45.2
+      specifier: 0.45.4
       version: 0.45.4
     framer-motion:
       specifier: ^12.23.24
@@ -58,7 +58,7 @@ catalogs:
       specifier: ^4.1.14
       version: 4.3.3
     tsx:
-      specifier: ^4.21.0
+      specifier: 4.23.15
       version: 4.23.15
     vite:
       specifier: ^7.3.2
@@ -413,6 +413,9 @@ importers:
       better-auth:
         specifier: ^1.7.18
         version: 1.7.18(drizzle-kit@0.31.11)(drizzle-orm@0.45.4(@types/pg@8.23.1)(kysely@0.29.8)(pg@8.23.1))(next@16.4.3(@types/node@25.9.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(pg@8.23.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.4(@types/pg@8.23.1)(kysely@0.29.8)(pg@8.23.1)
       framer-motion:
         specifier: 'catalog:'
         version: 12.43.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -493,6 +496,9 @@ importers:
       drizzle-kit:
         specifier: ^0.31.11
         version: 0.31.11
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.15
 
   scripts:
     devDependencies:

@@ -12,8 +12,9 @@
     "test": "node --experimental-strip-types --test"
   },
   "dependencies": {
-    "better-auth": "^1.7.18",
     "@workspace/db": "workspace:*",
+    "better-auth": "^1.7.18",
+    "drizzle-orm": "catalog:",
     "framer-motion": "catalog:",
     "next": "16.4.3",
     "react": "catalog:",

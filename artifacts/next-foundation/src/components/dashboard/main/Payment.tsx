@@ -1,23 +1,26 @@
 "use client";
-
+import { reserveHouse } from "@/actions/reserve";
+import {
+  MAX_DAYS,
+  MIN_DAYS,
+  PRICE_PER_DAY_ETB as PRICE_PER_DAY,
+} from "@/lib/pricing";
 import { useEffect, useState } from "react";
-
-const PRICE_PER_DAY = 2000;
-const MIN_DAYS = 1;
-const MAX_DAYS = 14;
 
 interface PaymentProps {
   status: string;
+  houseId: string;
   houseName?: string;
 }
 
 const etb = (amount: number) => `ETB ${amount.toLocaleString("en-US")}`;
 
-export default function Payment({ status, houseName }: PaymentProps) {
+export default function Payment({ status, houseName, houseId }: PaymentProps) {
   const [open, setOpen] = useState(false);
   const [days, setDays] = useState(MIN_DAYS);
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const isSale = status === "For Sale";
   const action = isSale ? "Buy" : "Rent";
@@ -37,6 +40,7 @@ export default function Payment({ status, houseName }: PaymentProps) {
     setAgreed(false);
     setLoading(false);
     setOpen(true);
+    setError("");
   }
 
   function changeDays(next: number) {
@@ -45,22 +49,29 @@ export default function Payment({ status, houseName }: PaymentProps) {
   }
 
   async function proceed() {
-    if (!agreed) return;
+    if (!agreed || loading) return;
     setLoading(true);
+    setError("");
 
-    console.log("Reserve:", { days, total });
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    const result = await reserveHouse(houseId, days);
 
-    setLoading(false);
-    setOpen(false);
+    if ("error" in result) {
+      setError(result.error);
+      setLoading(false);
+      return;
+    }
+    window.location.assign(result.checkoutUrl);
   }
 
   const reservedUntil = open
-    ? new Date(Date.now() + days * 24 * 60 * 60 * 1000).toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "long",
-        day: "numeric",
-      })
+    ? new Date(Date.now() + days * 24 * 60 * 60 * 1000).toLocaleDateString(
+        "en-US",
+        {
+          weekday: "short",
+          month: "long",
+          day: "numeric",
+        },
+      )
     : "";
 
   return (
@@ -91,7 +102,10 @@ export default function Payment({ status, houseName }: PaymentProps) {
                 <p className="font-mono text-xs uppercase tracking-wide text-[#243D35]/60">
                   Reservation
                 </p>
-                <h2 id="reserve-title" className="mt-2 text-2xl font-semibold leading-tight">
+                <h2
+                  id="reserve-title"
+                  className="mt-2 text-2xl font-semibold leading-tight"
+                >
                   {action} Later
                 </h2>
                 {houseName && (
@@ -105,7 +119,16 @@ export default function Payment({ status, houseName }: PaymentProps) {
                 aria-label="Close"
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F7F6F2] transition hover:bg-[#243D35] hover:text-white disabled:opacity-50"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
                   <path d="M6 6l12 12M18 6L6 18" />
                 </svg>
               </button>
@@ -211,6 +234,14 @@ export default function Payment({ status, houseName }: PaymentProps) {
               </button>
             </div>
           </div>
+          {error && (
+            <p
+              role="alert"
+              className="my-4 text-center rounded-md bg-red-50 px-4 py-3 text-sm text-red-700"
+            >
+              {error}
+            </p>
+          )}
         </dialog>
       )}
     </>
