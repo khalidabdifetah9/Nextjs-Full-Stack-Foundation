@@ -20,7 +20,6 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export default function IntelligentStudio() {
   const reduce = useReducedMotion();
 
-  // Fade + gentle rise, triggered once when scrolled into view
   const reveal = (delay = 0, y = 32) => ({
     initial: reduce ? false : { opacity: 0, y },
     whileInView: { opacity: 1, y: 0 },
@@ -71,12 +70,9 @@ export default function IntelligentStudio() {
           </div>
         </div>
 
-        {/* Video slides in from the right and settles */}
+        {/* Vertical reveal: nothing moves sideways, so no horizontal overflow */}
         <motion.div
-          initial={reduce ? false : { opacity: 0, x: 48 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 1, delay: 0.2, ease }}
+          {...reveal(0.2, 40)}
           className="relative h-96 sm:h-128 lg:h-auto lg:min-h-150 overflow-hidden rounded-lg bg-[#243D35]"
         >
           <video
