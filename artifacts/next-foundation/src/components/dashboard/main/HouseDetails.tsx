@@ -1,5 +1,5 @@
 import type { House } from "@/lib/houses";
-
+import Payment from "./Payment";
 const price = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "ETB",
@@ -15,10 +15,29 @@ const icons = {
   lot: "M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5",
 };
 
-function Stat({ icon, label, value }: { icon: keyof typeof icons; label: string; value: string }) {
+function Stat({
+  icon,
+  label,
+  value,
+}: {
+  icon: keyof typeof icons;
+  label: string;
+  value: string;
+}) {
   return (
     <div className="rounded-xl bg-[#F7F6F2] p-4">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="text-[#243D35]/70">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        className="text-[#243D35]/70"
+      >
         <path d={icons[icon]} />
       </svg>
       <p className="mt-3 text-lg font-semibold leading-none">{value}</p>
@@ -39,10 +58,22 @@ export default function HouseDetails({ house }: { house: House }) {
         </span>
       </div>
 
-      <h2 className="mt-5 text-2xl font-semibold leading-tight">{house.name}</h2>
+      <h2 className="mt-5 text-2xl font-semibold leading-tight">
+        {house.name}
+      </h2>
 
       <p className="mt-2 flex items-center gap-2 text-sm text-[#243D35]/70">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
           <path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z" />
           <circle cx="12" cy="10" r="2.5" />
         </svg>
@@ -52,26 +83,42 @@ export default function HouseDetails({ house }: { house: House }) {
       <p className="mt-6 text-3xl font-semibold tracking-tight">
         {price.format(house.price)}
         {house.status === "For Rent" && (
-          <span className="text-base font-normal text-[#243D35]/60"> / month</span>
+          <span className="text-base font-normal text-[#243D35]/60">
+            {" "}
+            / month
+          </span>
         )}
       </p>
 
       <div className="mt-6 grid grid-cols-2 gap-3">
         <Stat icon="bed" label="Bedrooms" value={String(house.bedrooms)} />
         <Stat icon="bath" label="Bathrooms" value={String(house.bathrooms)} />
-        <Stat icon="area" label="Area" value={`${house.sqft.toLocaleString("en-US")} sqft`} />
+        <Stat
+          icon="area"
+          label="Area"
+          value={`${house.sqft.toLocaleString("en-US")} sqft`}
+        />
         <Stat icon="car" label="Garage" value={`${house.garage} `} />
-        <Stat icon="calendar" label="Year built" value={String(house.yearBuilt)} />
+        <Stat
+          icon="calendar"
+          label="Year built"
+          value={String(house.yearBuilt)}
+        />
         <Stat icon="lot" label="Lot size" value={house.lotSize} />
       </div>
-
+      <Payment status={house.status} />
       <div className="mt-6 border-t border-[#243D35]/10 pt-6">
         <h3 className="text-sm font-semibold">About this home</h3>
-        <p className="mt-2 text-sm leading-relaxed text-[#243D35]/70">{house.description}</p>
+        <p className="mt-2 text-sm leading-relaxed text-[#243D35]/70">
+          {house.description}
+        </p>
 
         <ul className="mt-4 flex flex-wrap gap-2">
           {house.features.map((f) => (
-            <li key={f} className="rounded-full border border-[#243D35]/15 px-3 py-1.5 text-xs text-[#243D35]/80">
+            <li
+              key={f}
+              className="rounded-full border border-[#243D35]/15 px-3 py-1.5 text-xs text-[#243D35]/80"
+            >
               {f}
             </li>
           ))}
