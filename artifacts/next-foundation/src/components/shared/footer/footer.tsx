@@ -1,5 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 const linkGroups = [
   {
@@ -53,6 +58,16 @@ const socials = [
 ];
 
 export default function Footer() {
+  const reduce = useReducedMotion();
+
+  // Fade + gentle rise, triggered once when scrolled into view
+  const reveal = (delay = 0, y = 24) => ({
+    initial: reduce ? false : { opacity: 0, y },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.2 },
+    transition: { duration: 0.8, delay, ease },
+  });
+
   return (
     <footer className="relative px-3 overflow-hidden bg-[#243D35] font-poppins text-[#F7F6F2]">
       <Image
@@ -69,24 +84,32 @@ export default function Footer() {
 
       <div className="relative  mx-auto max-w-450 pt-16 md:pt-24">
         <div>
-          <p
+          {/* Same blur-to-sharp rise as the hero wordmark */}
+          <motion.p
             aria-hidden="true"
+            initial={reduce ? false : { opacity: 0, y: 60, filter: "blur(8px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 1, ease }}
             className="select-none pr-3 text-[19vw] font-semibold leading-[0.85] tracking-tighter text-[#F7F6F2] md:text-[18vw] lg:text-[15vw]"
           >
             HueEstate
-          </p>
-          <p className="mt-6 max-w-xl text-base text-[#F7F6F2]/85 md:mt-8 md:text-lg">
+          </motion.p>
+          <motion.p
+            {...reveal(0.2)}
+            className="mt-6 max-w-xl text-base text-[#F7F6F2]/85 md:mt-8 md:text-lg"
+          >
             Explore white canvas residences, test real time room palettes, and
             shape your space with complete confidence.
-          </p>
+          </motion.p>
         </div>
 
         {/* Middle: socials + link columns */}
         <div className="mt-14 flex flex-col gap-12 md:mt-24 lg:flex-row lg:items-end lg:justify-between">
           {/* Socials */}
           <ul className="flex items-center gap-3 lg:self-end">
-            {socials.map((s) => (
-              <li key={s.label}>
+            {socials.map((s, i) => (
+              <motion.li key={s.label} {...reveal(i * 0.08, 16)}>
                 <a
                   href={s.href}
                   aria-label={s.label}
@@ -102,14 +125,18 @@ export default function Footer() {
                     <path d={s.path} />
                   </svg>
                 </a>
-              </li>
+              </motion.li>
             ))}
           </ul>
 
           {/* Link columns */}
           <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:gap-x-16">
-            {linkGroups.map((group) => (
-              <nav key={group.title} aria-label={group.title}>
+            {linkGroups.map((group, i) => (
+              <motion.nav
+                key={group.title}
+                aria-label={group.title}
+                {...reveal(i * 0.12)}
+              >
                 <h3 className="text-lg font-medium text-[#F7F6F2]">
                   {group.title}
                 </h3>
@@ -125,16 +152,22 @@ export default function Footer() {
                     </li>
                   ))}
                 </ul>
-              </nav>
+              </motion.nav>
             ))}
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-14 flex flex-col gap-2 border-t border-[#F7F6F2]/15 py-6 text-sm text-[#F7F6F2]/75 sm:flex-row sm:items-center sm:justify-between md:mt-20 md:text-base">
+        {/* Bottom bar: simple fade, no movement */}
+        <motion.div
+          initial={reduce ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.9, delay: 0.2, ease }}
+          className="mt-14 flex flex-col gap-2 border-t border-[#F7F6F2]/15 py-6 text-sm text-[#F7F6F2]/75 sm:flex-row sm:items-center sm:justify-between md:mt-20 md:text-base"
+        >
           <p>© {new Date().getFullYear()} HueEstate. All rights reserved.</p>
           <p>Designed by Kalid Abdifeta.</p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );
