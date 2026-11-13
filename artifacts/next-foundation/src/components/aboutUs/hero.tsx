@@ -27,7 +27,7 @@ export default function AboutUsHero() {
             fill
             priority
             sizes="100vw"
-            src={"/herro.png"}
+            src={"/Hue_Office.jpg"}
             alt="About Us Hero Background Image"
             className="object-cover"
           />
