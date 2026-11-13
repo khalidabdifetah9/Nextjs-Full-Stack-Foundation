@@ -142,19 +142,24 @@ export default function Sidebar({
           className="flex items-center"
         >
           <Image
-            src="/logo.png"
-            width={112}
+            src="/logo.svg"
+            width={80}
             height={40}
             alt="HueEstate"
-            className={`h-auto w-28 ${hideWhenCollapsed}`}
+            className={`h-auto mt-3 w-20 ${hideWhenCollapsed}`}
           />
-          <span
-            className={`hidden h-10 w-10 items-center justify-center rounded-lg bg-[#243D35] font-semibold text-white ${
+          <div
+            className={`hidden relative h-13 w-14 items-center font-semibold text-white ${
               collapsed ? "lg:flex" : ""
             }`}
           >
-            H
-          </span>
+            <Image
+              src="/logo.svg"
+              fill
+              alt="HueEstate"
+              className={`h-auto`}
+            />
+          </div>
         </Link>
 
         <button

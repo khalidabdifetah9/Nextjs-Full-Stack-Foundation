@@ -1,17 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { houses } from "@/lib/houses";
-import { bookedSlots, formatTime, fromKey } from "@/lib/schedule";
+import { useRouter } from "next/navigation";
+import { bookAppointment, cancelAppointment } from "@/actions/schedule";
+import { MAX_UPCOMING, formatTime, fromKey, isSlotPast, timeSlots } from "@/lib/schedule";
 import Calendar from "./Calendar";
 import TimeSlots from "./TimeSlots";
 
-interface Appointment {
+export interface MyAppointment {
   id: string;
   date: string;
   time: string;
   topic: string;
-  note: string;
+}
+
+interface ScheduleBookingProps {
+  booked: Record<string, string[]>;
+  mine: MyAppointment[];
+  homes: { id: string; name: string }[];
 }
 
 const fieldClass =
@@ -25,48 +31,59 @@ function prettyDate(key: string) {
   });
 }
 
-export default function ScheduleBooking() {
+export default function ScheduleBooking({ booked, mine, homes }: ScheduleBookingProps) {
+  const router = useRouter();
+
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
-  const [topic, setTopic] = useState("General consultation");
+  const [houseId, setHouseId] = useState("");
   const [note, setNote] = useState("");
-  const [booked, setBooked] = useState<Record<string, string[]>>(bookedSlots);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const limitReached = mine.length >= MAX_UPCOMING;
 
   function pickDate(key: string) {
     setDate(key);
-    setTime(null);
+    setTime(null); // a new day needs a new time
+    setError("");
+    setSuccess("");
   }
 
-  function confirm() {
-    if (!date || !time) return;
+  async function confirm() {
+    if (!date || !time || saving) return;
+    setSaving(true);
+    setError("");
+    setSuccess("");
 
-    const appointment: Appointment = {
-      id: `${date}-${time}`,
-      date,
-      time,
-      topic,
-      note,
-    };
+    const result = await bookAppointment({ date, time, houseId: houseId || null, note });
+    setSaving(false);
 
-    console.log("New appointment:", appointment);
+    if ("error" in result) {
+      setError(result.error);
+      router.refresh(); // reload availability in case the time was just taken
+      return;
+    }
 
-    setBooked((prev) => ({ ...prev, [date]: [...(prev[date] ?? []), time] }));
-    setAppointments((prev) => [...prev, appointment]);
+    setSuccess(`Booked for ${prettyDate(date)} at ${formatTime(time)}.`);
     setDate(null);
     setTime(null);
     setNote("");
+    setHouseId("");
   }
 
-  function cancel(appointment: Appointment) {
-    setAppointments((prev) => prev.filter((a) => a.id !== appointment.id));
-    setBooked((prev) => ({
-      ...prev,
-      [appointment.date]: (prev[appointment.date] ?? []).filter(
-        (t) => t !== appointment.time
-      ),
-    }));
+  async function cancel(id: string) {
+    setError("");
+    setSuccess("");
+    const result = await cancelAppointment(id);
+    if ("error" in result) setError(result.error);
   }
+
+  // Times taken by others, plus times that already passed today
+  const unavailable = date
+    ? [...(booked[date] ?? []), ...timeSlots.filter((t) => isSlotPast(date, t))]
+    : [];
 
   return (
     <div className="mx-auto max-w-400 space-y-6">
@@ -82,11 +99,20 @@ export default function ScheduleBooking() {
         </p>
       </header>
 
-      <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-        {/* Left: calendar */}
-        <Calendar selected={date} onSelect={pickDate} />
+      {success && (
+        <p role="status" className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          {success}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
 
-        {/* Right: time + details */}
+      <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
+        <Calendar selected={date} booked={booked} onSelect={pickDate} />
+
         <div className="space-y-6">
           <section className="rounded-2xl bg-white p-4 sm:p-6">
             <h2 className="text-xl font-semibold">
@@ -95,7 +121,7 @@ export default function ScheduleBooking() {
 
             {date ? (
               <div className="mt-5 space-y-6">
-                <TimeSlots taken={booked[date] ?? []} selected={time} onSelect={setTime} />
+                <TimeSlots taken={unavailable} selected={time} onSelect={setTime} />
 
                 <div>
                   <label htmlFor="topic" className="mb-2 block text-sm font-medium">
@@ -103,13 +129,15 @@ export default function ScheduleBooking() {
                   </label>
                   <select
                     id="topic"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
+                    value={houseId}
+                    onChange={(e) => setHouseId(e.target.value)}
                     className={fieldClass}
                   >
-                    <option>General consultation</option>
-                    {houses.map((h) => (
-                      <option key={h.id}>Viewing: {h.name}</option>
+                    <option value="">General consultation</option>
+                    {homes.map((h) => (
+                      <option key={h.id} value={h.id}>
+                        Viewing: {h.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -121,6 +149,7 @@ export default function ScheduleBooking() {
                   <textarea
                     id="note"
                     rows={3}
+                    maxLength={500}
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     placeholder="Anything we should know?"
@@ -128,15 +157,23 @@ export default function ScheduleBooking() {
                   />
                 </div>
 
+                {limitReached && (
+                  <p className="text-sm text-amber-700">
+                    You already have {MAX_UPCOMING} upcoming appointments. Cancel one to book another.
+                  </p>
+                )}
+
                 <button
                   type="button"
                   onClick={confirm}
-                  disabled={!time}
+                  disabled={!time || saving || limitReached}
                   className="w-full rounded-md bg-[#243D35] px-6 py-4 text-base font-medium text-white transition hover:bg-[#1a2d27] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {time
-                    ? `Confirm ${formatTime(time)}`
-                    : "Choose a time to continue"}
+                  {saving
+                    ? "Booking..."
+                    : time
+                      ? `Confirm ${formatTime(time)}`
+                      : "Choose a time to continue"}
                 </button>
               </div>
             ) : (
@@ -146,12 +183,11 @@ export default function ScheduleBooking() {
             )}
           </section>
 
-          {/* Booked by the user */}
-          {appointments.length > 0 && (
+          {mine.length > 0 && (
             <section className="rounded-2xl bg-white p-4 sm:p-6">
-              <h2 className="text-xl font-semibold">Your appointments</h2>
+              <h2 className="text-xl font-semibold">Your upcoming appointments</h2>
               <ul className="mt-4 divide-y divide-[#243D35]/10">
-                {appointments.map((a) => (
+                {mine.map((a) => (
                   <li key={a.id} className="flex items-center justify-between gap-4 py-3">
                     <div className="min-w-0">
                       <p className="font-medium">
@@ -161,7 +197,7 @@ export default function ScheduleBooking() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => cancel(a)}
+                      onClick={() => cancel(a.id)}
                       className="shrink-0 text-sm text-red-600 underline underline-offset-4"
                     >
                       Cancel
