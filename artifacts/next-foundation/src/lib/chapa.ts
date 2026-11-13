@@ -65,10 +65,13 @@ export async function verifyPayment(reference: string): Promise<ChapaPayment | n
     cache: "no-store",
     headers: authHeaders(),
   });
+
+  const json = await res.json().catch(() => null);
+
   if (!res.ok) {
-    console.error("Chapa verify failed:", res.status);
+    // warn, not error: a pending payment isn't a crash, so no red overlay
+    console.warn("Chapa verify not ok:", reference, res.status, JSON.stringify(json));
     return null;
   }
-  const json = await res.json().catch(() => null);
   return (json?.data as ChapaPayment) ?? null;
 }

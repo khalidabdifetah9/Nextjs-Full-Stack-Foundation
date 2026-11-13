@@ -1,14 +1,15 @@
 import Link from "next/link";
-import type {Metadata} from "next"
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { and, eq } from "drizzle-orm";
+import { and, eq, desc } from "drizzle-orm";
 import { db, houses, orders, reservations } from "@workspace/db";
 import { auth } from "@/lib/auth";
 import { settleOrder } from "@/lib/payments";
 import PrintButton from "@/components/payment/PrintButton";
 
-export const metadata:Metadata = { title: "Payment | HueEstate" };
+
+export const metadata: Metadata = { title: "Payment | HueEstate" };
 
 const etb = (cents: number) =>
   `ETB ${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
@@ -27,14 +28,18 @@ export default async function PaymentResultPage({
   if (!session) redirect("/signin");
 
   const { ref } = await searchParams;
-  if (!ref) redirect("/dashboard");
+  const where = ref
+    ? and(eq(orders.merchantReference, ref), eq(orders.userId, session.user.id))
+    : eq(orders.userId, session.user.id);
 
   // Only the owner can see an order
   const [found] = await db
     .select()
     .from(orders)
-    .where(and(eq(orders.merchantReference, ref), eq(orders.userId, session.user.id)))
+    .where(where)
+    .orderBy(desc(orders.createdAt))
     .limit(1);
+
   if (!found) redirect("/dashboard");
 
   // The redirect is not proof of payment: ask Chapa on the server
@@ -57,7 +62,7 @@ export default async function PaymentResultPage({
         text="If you just paid, it can take a moment to confirm. Check again in a few seconds."
         action={
           <Link
-            href={`/dashboard/payment/success?ref=${order.merchantReference}`}
+            href={`/dashboard/payment?ref=${order.merchantReference}`}
             className="rounded-md bg-[#243D35] px-6 py-3.5 text-base font-medium text-white"
           >
             Check again
@@ -74,7 +79,10 @@ export default async function PaymentResultPage({
         title="Payment was not completed"
         text="You haven't been charged for a reservation. You can try again at any time."
         action={
-          <Link href="/dashboard" className="rounded-md bg-[#243D35] px-6 py-3.5 text-base font-medium text-white">
+          <Link
+            href="/dashboard"
+            className="rounded-md bg-[#243D35] px-6 py-3.5 text-base font-medium text-white"
+          >
             Back to homes
           </Link>
         }
@@ -89,7 +97,10 @@ export default async function PaymentResultPage({
         title="This home was reserved by someone else"
         text={`Your payment (${order.merchantReference}) went through just after another reservation. Contact us with this reference and we will refund you.`}
         action={
-          <Link href="/contact-us" className="rounded-md bg-[#243D35] px-6 py-3.5 text-base font-medium text-white">
+          <Link
+            href="/contact-us"
+            className="rounded-md bg-[#243D35] px-6 py-3.5 text-base font-medium text-white"
+          >
             Contact support
           </Link>
         }
@@ -105,7 +116,10 @@ export default async function PaymentResultPage({
     ["Email", order.customerEmail],
     ["Home", house.name],
     ["Location", house.location],
-    ["Reservation", `${reservation.days} ${reservation.days === 1 ? "day" : "days"}`],
+    [
+      "Reservation",
+      `${reservation.days} ${reservation.days === 1 ? "day" : "days"}`,
+    ],
     ["Held from", when(reservation.startsAt)],
     ["Held until", when(reservation.endsAt)],
     ["Payment method", order.paymentMethod ?? "—"],
@@ -114,10 +128,15 @@ export default async function PaymentResultPage({
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="print:hidden">
-        <p className="font-mono text-xs uppercase tracking-wide text-[#243D35]/60">Payment</p>
-        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Reservation confirmed</h1>
+        <p className="font-mono text-xs uppercase tracking-wide text-[#243D35]/60">
+          Payment
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
+          Reservation confirmed
+        </h1>
         <p className="mt-2 text-base text-[#243D35]/70">
-          {house.name} is yours to {house.status === "For Sale" ? "buy" : "rent"} until{" "}
+          {house.name} is yours to{" "}
+          {house.status === "For Sale" ? "buy" : "rent"} until{" "}
           {when(reservation.endsAt)}.
         </p>
       </div>
@@ -135,9 +154,14 @@ export default async function PaymentResultPage({
 
         <dl className="divide-y divide-[#243D35]/10">
           {rows.map(([label, value]) => (
-            <div key={label} className="flex justify-between gap-6 py-3 text-sm">
+            <div
+              key={label}
+              className="flex justify-between gap-6 py-3 text-sm"
+            >
               <dt className="text-[#243D35]/60">{label}</dt>
-              <dd className="min-w-0 break-words text-right font-medium">{value}</dd>
+              <dd className="min-w-0 break-words text-right font-medium">
+                {value}
+              </dd>
             </div>
           ))}
         </dl>

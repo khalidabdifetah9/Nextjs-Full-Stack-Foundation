@@ -16,12 +16,28 @@ const isUniqueViolation = (e: unknown) => {
   return err?.code === "23505" || err?.cause?.code === "23505";
 };
 
+type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
+async function daysOf(tx: Tx, reservationId: string) {
+  const [r] = await tx
+    .select({ days: reservations.days })
+    .from(reservations)
+    .where(eq(reservations.id, reservationId))
+    .limit(1);
+  return r.days;
+}
+
 // Asks Chapa for the real payment state and updates our records.
-// Safe to call many times, and later a webhook can call it too.
+// Safe to call many times.
 export async function settleOrder(order: Order): Promise<Order> {
   if (order.status !== "PENDING") return order;
 
-  const payment = await verifyPayment(order.merchantReference);
+  // Look up by our own reference first (this one is proven to work)
+  const payment =
+    (await verifyPayment(order.merchantReference)) ??
+    (order.chapaReference ? await verifyPayment(order.chapaReference) : null);
+
+  // Not paid yet (or Chapa doesn't know it yet): nothing to do, try again later
   if (!payment) return order;
 
   if (payment.status === "SUCCESS") {
@@ -31,7 +47,7 @@ export async function settleOrder(order: Order): Promise<Order> {
       payment.merchant_reference === order.merchantReference;
 
     if (!matches) {
-      console.error("Payment mismatch, not activating:", order.merchantReference, payment);
+      console.warn("Payment mismatch, not activating:", order.merchantReference, payment);
       return order;
     }
 
@@ -39,7 +55,7 @@ export async function settleOrder(order: Order): Promise<Order> {
       status: "SUCCESS" as const,
       paidAt: new Date(),
       chapaReference: payment.chapa_reference,
-      paymentMethod: payment.payment_method ?? null,
+      paymentMethod: payment.payment_method || null,
       serviceFee: payment.service_fee ?? null,
     };
 
@@ -53,15 +69,15 @@ export async function settleOrder(order: Order): Promise<Order> {
         if (!claimed) return; // another request already processed it
 
         const now = new Date();
-        const endsAt = new Date(now.getTime() + (await daysOf(tx, order.reservationId)) * 86_400_000);
+        const days = await daysOf(tx, order.reservationId);
         await tx
           .update(reservations)
-          .set({ status: "active", startsAt: now, endsAt })
+          .set({ status: "active", startsAt: now, endsAt: new Date(now.getTime() + days * 86_400_000) })
           .where(eq(reservations.id, order.reservationId));
       });
     } catch (e) {
       if (!isUniqueViolation(e)) throw e;
-      // Someone else's hold became active first. The money was taken, so it
+      // Someone else's hold became active first. The money was taken, so this
       // needs a manual refund.
       console.error("PAID BUT HOUSE ALREADY RESERVED, refund needed:", order.merchantReference);
       await db.update(orders).set(paid).where(eq(orders.id, order.id));
@@ -77,18 +93,8 @@ export async function settleOrder(order: Order): Promise<Order> {
       .set({ status: "cancelled" })
       .where(eq(reservations.id, order.reservationId));
   }
-  // PENDING / INCOMPLETE: the customer may still finish, so we leave it as is
+  // PENDING / INCOMPLETE: the customer may still finish, so leave it as it is
 
   const [fresh] = await db.select().from(orders).where(eq(orders.id, order.id)).limit(1);
   return fresh ?? order;
-}
-
-type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
-async function daysOf(tx: Tx, reservationId: string) {
-  const [r] = await tx
-    .select({ days: reservations.days })
-    .from(reservations)
-    .where(eq(reservations.id, reservationId))
-    .limit(1);
-  return r.days;
 }
