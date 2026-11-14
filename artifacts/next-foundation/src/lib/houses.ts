@@ -57,13 +57,13 @@ export const houses: House[] = [
       "Bedroom fireplace",
       "En-suite bathroom",
     ],
-    thumb: "/rooms/360/livingroom_forbed.png",
+    thumb: "/rooms/360/livingroom_forbed.avif",
     rooms: [
       {
         id: "living",
         name: "Living Room",
-        panorama: "/rooms/360/livingroom_forbed.png",
-        mask: "/rooms/mask/ulebombo_wall_mask.png",
+        panorama: "/rooms/360/livingroom_forbed.avif",
+        mask: "/rooms/mask/ulebombo_wall_mask.avif",
         hotspots: [
           { to: "bedroom", label: "Master Bedroom", pitch: -4, yaw: -110 },
         ],
@@ -71,8 +71,8 @@ export const houses: House[] = [
       {
         id: "bedroom",
         name: "Master Bedroom",
-        panorama: "/rooms/360/bedroom.png",
-        mask: "/rooms/mask/lythwood_wall_mask_hires.png",
+        panorama: "/rooms/360/bedroom.avif",
+        mask: "/rooms/mask/lythwood_wall_mask_hires.avif",
         startYaw: -90,
         hotspots: [{ to: "living", label: "Living Room", pitch: -5, yaw: 248 }],
       },
@@ -100,20 +100,20 @@ export const houses: House[] = [
       "Walk-in shower and corner bathtub",
       "Skylight in bathroom",
     ],
-    thumb: "/rooms/360/living.png",
+    thumb: "/rooms/360/living.avif",
     rooms: [
       {
         id: "lounge",
         name: "Lounge",
-        panorama: "/rooms/360/living.png",
-        mask: "/rooms/mask/living.png",
+        panorama: "/rooms/360/living.avif",
+        mask: "/rooms/mask/living.avif",
         hotspots: [{ to: "bathroom", label: "bath Room", pitch: -3, yaw: 248 }],
       },
       {
         id: "bathroom",
         name: "Bath Room",
-        panorama: "/rooms/360/bathroom.png",
-        mask: "/rooms/mask/bathforliving.png",
+        panorama: "/rooms/360/bathroom.avif",
+        mask: "/rooms/mask/bathforliving.avif",
         startYaw: 120,
         hotspots: [
           { to: "lounge", label: "Lounge", pitch: -3, yaw: 120 },
@@ -142,13 +142,13 @@ export const houses: House[] = [
       "Easy-clean glossy tile floor",
       "Plenty of wall sockets",
     ],
-    thumb: "/rooms/360/office.jpg",
+    thumb: "/rooms/360/office.avif",
     rooms: [
       {
         id: "main-hall",
         name: "Main Living Area",
-        panorama: "/rooms/360/office.jpg",
-        mask: "/rooms/mask/office_wall_mask.png",
+        panorama: "/rooms/360/office.avif",
+        mask: "/rooms/mask/office_wall_mask.avif",
         hotspots: [],
       },
     ],
@@ -174,13 +174,13 @@ export const houses: House[] = [
       "Outdoor patio access",
       "Paintable walls",
     ],
-    thumb: "/rooms/360/single_room.png",
+    thumb: "/rooms/360/single_room.avif",
     rooms: [
       {
         id: "great-room",
         name: "Great Room",
-        panorama: "/rooms/360/single_room.png",
-        mask: "/rooms/mask/single2_mask.png",
+        panorama: "/rooms/360/single_room.avif",
+        mask: "/rooms/mask/single2_mask.avif",
         hotspots: [
           { to: "kitchen", label: "Chef's Kitchen", pitch: -3, yaw: 90 },
           { to: "patio", label: "Outdoor Patio", pitch: -5, yaw: -80 },
@@ -210,13 +210,13 @@ export const houses: House[] = [
       "Two bedrooms and a bathroom",
       "Plenty of natural light",
     ],
-    thumb: "/rooms/360/smallhouse.png",
+    thumb: "/rooms/360/smallhouse.avif",
     rooms: [
       {
         id: "living-room",
         name: "Living Room",
-        panorama: "/rooms/360/smallhouse.png",
-        mask: "/rooms/mask/r1_mask.png",
+        panorama: "/rooms/360/smallhouse.avif",
+        mask: "/rooms/mask/r1_mask.avif",
         hotspots: [
           { to: "room1", label: "Room 1", pitch: -4, yaw: 123 },
           { to: "room2", label: "Room 2", pitch: -3, yaw: -105 },
@@ -226,8 +226,8 @@ export const houses: House[] = [
       {
         id: "room1",
         name: "Room 1",
-        panorama: "/rooms/360/room1.png",
-        mask: "/rooms/mask/r2_mask.png",
+        panorama: "/rooms/360/room1.avif",
+        mask: "/rooms/mask/r2_mask.avif",
         hotspots: [
           { to: "living-room", label: "living-room", pitch: -5, yaw: -250 },
         ],
@@ -235,8 +235,8 @@ export const houses: House[] = [
       {
         id: "room2",
         name: "Room 2",
-        panorama: "/rooms/360/room1.png",
-        mask: "/rooms/mask/r2_mask.png",
+        panorama: "/rooms/360/room1.avif",
+        mask: "/rooms/mask/r2_mask.avif",
         startYaw: 75,
         hotspots: [
           { to: "living-room", label: "Living Room", pitch: -4, yaw: -250 },
@@ -245,8 +245,8 @@ export const houses: House[] = [
       {
         id: "bathroom",
         name: "Bath Room",
-        panorama: "/rooms/360/bathroom_for_smallhouse.png",
-        mask: "/rooms/mask/bathroom_wall_mask.png",
+        panorama: "/rooms/360/bathroom_for_smallhouse.avif",
+        mask: "/rooms/mask/bathroom_wall_mask.avif",
         startYaw: 45,
         hotspots: [
           { to: "living-room", label: "Living Room", pitch: -4, yaw: 80 },

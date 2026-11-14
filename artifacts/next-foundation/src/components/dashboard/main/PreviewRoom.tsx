@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { houses } from "@/lib/houses";
+import type { House } from "@/lib/houses";
 import PanoramaViewer from "./PanoramaViewer";
 import ColorBar from "./ColorBar";
 import HouseDetails from "./HouseDetails";
 import HouseSelector from "./HouseSelector";
 import RoomChips from "./RoomChips";
 
-export default function PreviewRoom() {
+export default function PreviewRoom({ houses }: { houses: House[] }) {
   const [houseId, setHouseId] = useState(houses[0].id);
   const [roomId, setRoomId] = useState(houses[0].rooms[0].id);
   const [color, setColor] = useState<string | null>(null);
