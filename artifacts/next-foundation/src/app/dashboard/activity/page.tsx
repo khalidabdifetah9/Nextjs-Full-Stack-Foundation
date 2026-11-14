@@ -1,5 +1,6 @@
-import type {Metadata} from "next" 
+import type { Metadata } from "next";
 import Link from "next/link";
+import AdminActivity from "@/components/admin/AdminActivity";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { and, desc, eq, inArray } from "drizzle-orm";
@@ -8,11 +9,17 @@ import { auth } from "@/lib/auth";
 import { expireStaleReservations } from "@/lib/payments";
 import { businessNow, formatTime, fromKey } from "@/lib/schedule";
 
-export const metadata:Metadata = { title: "My Activity | HueEstate" };
+export const metadata: Metadata = { title: "My Activity | HueEstate" };
 
 const etb = (cents: number) => `ETB ${(cents / 100).toLocaleString("en-US")}`;
 const day = (d: Date | null) =>
-  d ? d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—";
+  d
+    ? d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "—";
 
 async function loadActivity(userId: string) {
   await expireStaleReservations();
@@ -28,11 +35,18 @@ async function loadActivity(userId: string) {
       .where(and(eq(orders.userId, userId), eq(orders.status, "SUCCESS")))
       .orderBy(desc(orders.paidAt)),
     db
-      .select({ r: reservations, houseName: houses.name, location: houses.location })
+      .select({
+        r: reservations,
+        houseName: houses.name,
+        location: houses.location,
+      })
       .from(reservations)
       .innerJoin(houses, eq(houses.id, reservations.houseId))
       .where(
-        and(eq(reservations.userId, userId), inArray(reservations.status, ["active", "expired"]))
+        and(
+          eq(reservations.userId, userId),
+          inArray(reservations.status, ["active", "expired"]),
+        ),
       )
       .orderBy(desc(reservations.startsAt)),
     db
@@ -52,7 +66,8 @@ async function loadActivity(userId: string) {
   }));
 
   const reserved = holds.map(({ r, houseName, location }) => {
-    const live = r.status === "active" && !!r.endsAt && r.endsAt.getTime() > now;
+    const live =
+      r.status === "active" && !!r.endsAt && r.endsAt.getTime() > now;
     return {
       id: r.id,
       houseName,
@@ -60,13 +75,22 @@ async function loadActivity(userId: string) {
       days: r.days,
       endsAt: r.endsAt,
       live,
-      daysLeft: live && r.endsAt ? Math.ceil((r.endsAt.getTime() - now) / 86_400_000) : 0,
+      daysLeft:
+        live && r.endsAt
+          ? Math.ceil((r.endsAt.getTime() - now) / 86_400_000)
+          : 0,
     };
   });
 
   const meetings = visits.map((v) => {
-    const upcoming = v.date > bizNow.date || (v.date === bizNow.date && v.time > bizNow.time);
-    const state = v.status === "cancelled" ? "Cancelled" : upcoming ? "Upcoming" : "Completed";
+    const upcoming =
+      v.date > bizNow.date || (v.date === bizNow.date && v.time > bizNow.time);
+    const state =
+      v.status === "cancelled"
+        ? "Cancelled"
+        : upcoming
+          ? "Upcoming"
+          : "Completed";
     return { id: v.id, date: v.date, time: v.time, topic: v.topic, state };
   });
 
@@ -88,7 +112,13 @@ const badge: Record<string, string> = {
   Expired: "bg-[#F7F6F2] text-[#243D35]/70",
 };
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <section className="rounded-2xl bg-white p-5 sm:p-6">
       <h2 className="text-xl font-semibold">{title}</h2>
@@ -97,11 +127,22 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function Empty({ text, href, cta }: { text: string; href: string; cta: string }) {
+function Empty({
+  text,
+  href,
+  cta,
+}: {
+  text: string;
+  href: string;
+  cta: string;
+}) {
   return (
     <div className="rounded-xl bg-[#F7F6F2] p-6 text-center">
       <p className="text-sm text-[#243D35]/70">{text}</p>
-      <Link href={href} className="mt-3 inline-block text-sm font-medium underline underline-offset-4">
+      <Link
+        href={href}
+        className="mt-3 inline-block text-sm font-medium underline underline-offset-4"
+      >
         {cta}
       </Link>
     </div>
@@ -111,6 +152,7 @@ function Empty({ text, href, cta }: { text: string; href: string; cta: string })
 export default async function ActivityPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/signin");
+  if (session.user.role === "admin") return <AdminActivity />;
 
   const { payments, reserved, meetings, totalPaid, activeHolds, upcoming } =
     await loadActivity(session.user.id);
@@ -147,20 +189,32 @@ export default async function ActivityPage() {
       <div className="grid gap-6 xl:grid-cols-2">
         <Section title="Reserved homes">
           {reserved.length === 0 ? (
-            <Empty text="You haven't reserved a home yet." href="/dashboard" cta="Browse homes" />
+            <Empty
+              text="You haven't reserved a home yet."
+              href="/dashboard"
+              cta="Browse homes"
+            />
           ) : (
             <ul className="divide-y divide-[#243D35]/10">
               {reserved.map((r) => (
-                <li key={r.id} className="flex items-start justify-between gap-4 py-4">
+                <li
+                  key={r.id}
+                  className="flex items-start justify-between gap-4 py-4"
+                >
                   <div className="min-w-0">
                     <p className="truncate font-medium">{r.houseName}</p>
-                    <p className="truncate text-sm text-[#243D35]/60">{r.location}</p>
+                    <p className="truncate text-sm text-[#243D35]/60">
+                      {r.location}
+                    </p>
                     <p className="mt-1 text-sm text-[#243D35]/60">
-                      {r.days} {r.days === 1 ? "day" : "days"} · held until {day(r.endsAt)}
+                      {r.days} {r.days === 1 ? "day" : "days"} · held until{" "}
+                      {day(r.endsAt)}
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge[r.live ? "Active" : "Expired"]}`}>
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${badge[r.live ? "Active" : "Expired"]}`}
+                    >
                       {r.live ? "Active" : "Expired"}
                     </span>
                     {r.live && (
@@ -177,11 +231,18 @@ export default async function ActivityPage() {
 
         <Section title="Payments">
           {payments.length === 0 ? (
-            <Empty text="No completed payments yet." href="/dashboard" cta="Reserve a home" />
+            <Empty
+              text="No completed payments yet."
+              href="/dashboard"
+              cta="Reserve a home"
+            />
           ) : (
             <ul className="divide-y divide-[#243D35]/10">
               {payments.map((p) => (
-                <li key={p.id} className="flex items-start justify-between gap-4 py-4">
+                <li
+                  key={p.id}
+                  className="flex items-start justify-between gap-4 py-4"
+                >
                   <div className="min-w-0">
                     <p className="truncate font-medium">{p.houseName}</p>
                     <p className="text-sm text-[#243D35]/60">
@@ -206,11 +267,18 @@ export default async function ActivityPage() {
 
       <Section title="Appointments">
         {meetings.length === 0 ? (
-          <Empty text="You haven't booked an appointment yet." href="/dashboard/schedule" cta="Make a schedule" />
+          <Empty
+            text="You haven't booked an appointment yet."
+            href="/dashboard/schedule"
+            cta="Make a schedule"
+          />
         ) : (
           <ul className="divide-y divide-[#243D35]/10">
             {meetings.map((m) => (
-              <li key={m.id} className="flex items-center justify-between gap-4 py-4">
+              <li
+                key={m.id}
+                className="flex items-center justify-between gap-4 py-4"
+              >
                 <div className="min-w-0">
                   <p className="font-medium">
                     {fromKey(m.date).toLocaleDateString("en-US", {
@@ -220,9 +288,13 @@ export default async function ActivityPage() {
                     })}{" "}
                     · {formatTime(m.time)}
                   </p>
-                  <p className="truncate text-sm text-[#243D35]/60">{m.topic}</p>
+                  <p className="truncate text-sm text-[#243D35]/60">
+                    {m.topic}
+                  </p>
                 </div>
-                <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${badge[m.state]}`}>
+                <span
+                  className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${badge[m.state]}`}
+                >
                   {m.state}
                 </span>
               </li>

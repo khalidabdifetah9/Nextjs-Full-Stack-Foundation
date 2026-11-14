@@ -79,6 +79,18 @@ const items: NavItem[] = [
 
 const adminItem: NavItem[] = [
   {
+    key: "preview",
+    label: "Preview Room",
+    href: "/dashboard",
+    act: "dashboard",
+    icon: (
+      <svg {...ic}>
+        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+        <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" />
+      </svg>
+    ),
+  },
+  {
     key: "admin",
     label: "Manage Homes",
     href: "/dashboard/admin",
@@ -102,15 +114,15 @@ const adminItem: NavItem[] = [
       </svg>
     ),
   },
+
   {
-    key: "preview",
-    label: "Preview Room",
-    href: "/dashboard",
-    act: "dashboard",
+    key: "activity",
+    label: "Activities",
+    href: "/dashboard/activity",
+    act: "activity",
     icon: (
       <svg {...ic}>
-        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
-        <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" />
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
       </svg>
     ),
   },

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import ChatBot from "@/components/dashboard/main/ChatBot"
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -16,10 +17,13 @@ export default async function DashboardLayout({
   const { name, email, image, role } = session.user;
 
   return (
-    <DashboardShell
-      user={{ name, email, image: image ?? null, role: role ?? "user" }}
-    >
-      {children}
-    </DashboardShell>
+    <>
+      <DashboardShell
+        user={{ name, email, image: image ?? null, role: role ?? "user" }}
+      >
+        {children}
+      </DashboardShell>
+      <ChatBot />
+    </>
   );
 }

@@ -35,7 +35,6 @@ export default async function AdminPage() {
             <li key={home.id} className="overflow-hidden rounded-2xl bg-white">
               <div className="relative aspect-3/2 bg-[#F7F6F2]">
                 {home.thumbUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={home.thumbUrl} alt="" className="h-full w-full object-cover" />
                 )}
                 <span
