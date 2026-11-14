@@ -32,7 +32,8 @@ export async function reserveHouse(
     .from(houses)
     .where(eq(houses.id, houseId))
     .limit(1);
-  if (!house) return { error: "This home can't be reserved yet." };
+  if (!house || !house.published)
+    return { error: "This home can't be reserved yet." };
 
   await expireStaleReservations();
   const [taken] = await db
@@ -93,7 +94,10 @@ export async function reserveHouse(
       meta: { order_id: order.id, reservation_id: reservation.id },
     });
 
-    await db.update(orders).set({ checkoutUrl, chapaReference }).where(eq(orders.id, order.id));
+    await db
+      .update(orders)
+      .set({ checkoutUrl, chapaReference })
+      .where(eq(orders.id, order.id));
     return { checkoutUrl, reference: merchantReference };
   } catch (e) {
     console.error("RESERVE FAILED:", e);

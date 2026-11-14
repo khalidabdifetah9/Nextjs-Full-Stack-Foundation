@@ -38,7 +38,7 @@ export default function CallToAction() {
                   </span>
                 ))}
                 <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#243D35] bg-[#F7F6F2] text-[9px] font-semibold text-[#243D35]">
-                  3M+
+                  1k+
                 </span>
               </div>
               <span className="text-xs font-medium uppercase tracking-wide text-[#F7F6F2] sm:text-sm">

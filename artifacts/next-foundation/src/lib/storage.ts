@@ -1,5 +1,4 @@
 import { Client } from "@replit/object-storage";
-
 let client: Client | null = null;
 
 export function storage() {
@@ -9,10 +8,7 @@ export function storage() {
   return client;
 }
 
-// The database stores keys. This turns one into the URL the browser uses.
-export function mediaUrl(key: string | null | undefined) {
-  return key ? `/media/${key}` : null;
-}
+export { mediaUrl } from "./media-url";
 
 const TYPES: Record<string, string> = {
   png: "image/png",

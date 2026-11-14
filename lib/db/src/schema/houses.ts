@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { integer,boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 export const listingStatus = pgEnum("listing_status", ["For Sale", "For Rent"]);
@@ -16,6 +16,7 @@ export const houses = pgTable("houses", {
   bathrooms: integer("bathrooms").notNull(),
   garage: text("garage"),
   yearBuilt: integer("year_built"),
+  published: boolean("published").notNull().default(true),
   lotSize: text("lot_size"),
   description: text("description"),
   features: text("features").array().notNull().default(sql`'{}'::text[]`),

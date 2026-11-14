@@ -19,7 +19,8 @@
     "framer-motion": "catalog:",
     "next": "16.4.3",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.14",

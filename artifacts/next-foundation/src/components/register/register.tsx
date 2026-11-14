@@ -109,7 +109,7 @@ export default function SignUp() {
 
         <div className="absolute inset-x-0 bottom-6 p-6 text-[#F7F6F2] md:p-12">
           <h2 className="text-2xl font-semibold leading-tight sm:text-3xl lg:text-5xl">
-            Design your dream space today
+            Explore your dream space today
           </h2>
           <p className="mt-2 max-w-md text-sm text-[#F7F6F2]/85 sm:text-base lg:mt-4 lg:text-lg">
             Create an account to save properties and test custom room palettes.

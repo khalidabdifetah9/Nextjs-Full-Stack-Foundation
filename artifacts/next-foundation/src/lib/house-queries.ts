@@ -1,11 +1,11 @@
-import { asc } from "drizzle-orm";
+import { asc,eq } from "drizzle-orm";
 import { db, houseRooms, houses, roomHotspots } from "@workspace/db";
 import type { House } from "./houses";
 import { mediaUrl } from "./storage";
 
 export async function getHouses(): Promise<House[]> {
   const [homes, rooms, spots] = await Promise.all([
-    db.select().from(houses).orderBy(asc(houses.createdAt), asc(houses.id)),
+    db.select().from(houses).where(eq(houses.published, true)).orderBy(asc(houses.createdAt), asc(houses.id)),
     db.select().from(houseRooms).orderBy(asc(houseRooms.position)),
     db.select().from(roomHotspots),
   ]);
