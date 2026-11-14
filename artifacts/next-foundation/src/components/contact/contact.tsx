@@ -21,8 +21,8 @@ const iconProps = {
 const info = [
   {
     id: "email",
-    text: "hello@destello.com",
-    href: "mailto:hello@destello.com",
+    text: "hello@HueEstate.com",
+    href: "mailto:hello@HueEstate.com",
     icon: (
       <svg {...iconProps}>
         <rect x="3" y="5" width="18" height="14" rx="1" />
@@ -32,8 +32,8 @@ const info = [
   },
   {
     id: "phone",
-    text: "+251 900 000 000",
-    href: "tel:+251900000000",
+    text: "+251 945 630 720",
+    href: "tel:+251945630720",
     icon: (
       <svg {...iconProps}>
         <path d="M5 4h4l2 5-2.5 1.500a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" />
