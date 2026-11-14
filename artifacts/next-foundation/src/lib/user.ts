@@ -4,6 +4,7 @@ export interface SidebarUser {
   name: string;
   email: string;
   image: string | null;
+  role: string;
 }
 
 export function getInitials(name: string) {

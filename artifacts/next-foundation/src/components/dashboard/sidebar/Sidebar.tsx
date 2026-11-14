@@ -74,7 +74,46 @@ const items: NavItem[] = [
         <circle cx="12" cy="7" r="4" />
       </svg>
     ),
-  }
+  },
+];
+
+const adminItem: NavItem[] = [
+  {
+    key: "admin",
+    label: "Manage Homes",
+    href: "/dashboard/admin",
+    act: "admin",
+    icon: (
+      <svg {...ic}>
+        <path d="M3 10.5L12 3l9 7.5V21H3V10.5z" />
+        <path d="M9 21v-7h6v7" />
+      </svg>
+    ),
+  },
+  {
+    key: "profile",
+    label: "Profile",
+    href: "/dashboard/profile",
+    act: "profile",
+    icon: (
+      <svg {...ic}>
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  },
+  {
+    key: "preview",
+    label: "Preview Room",
+    href: "/dashboard",
+    act: "dashboard",
+    icon: (
+      <svg {...ic}>
+        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+        <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" />
+      </svg>
+    ),
+  },
 ];
 
 interface SidebarProps {
@@ -94,8 +133,7 @@ export default function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const onProfile = pathname?.endsWith("profile");
-
-  // "collapsed" only applies from lg up. On mobile the drawer is always full.
+  const navItems = user.role === "admin" ? adminItem : items;
   const hideWhenCollapsed = collapsed ? "lg:hidden" : "";
   const row = `relative flex items-center gap-4 rounded-xl px-3.5 py-3.5 text-base transition-colors ${
     collapsed ? "lg:justify-center lg:px-0" : ""
@@ -153,12 +191,7 @@ export default function Sidebar({
               collapsed ? "lg:flex" : ""
             }`}
           >
-            <Image
-              src="/logo.svg"
-              fill
-              alt="HueEstate"
-              className={`h-auto`}
-            />
+            <Image src="/logo.svg" fill alt="HueEstate" className={`h-auto`} />
           </div>
         </Link>
 
@@ -218,8 +251,11 @@ export default function Sidebar({
       {/* Navigation */}
       <nav aria-label="Dashboard" className="flex-1 px-3 py-4 md:mt-6">
         <ul className="space-y-1.5">
-          {items.map((item) => {
-            const active = pathname?.endsWith(item.act);
+          {navItems.map((item) => {
+            const active =
+              item.act === "admin"
+                ? pathname?.startsWith("/dashboard/admin")
+                : pathname?.endsWith(item.act);
             return (
               <li key={item.key}>
                 <Link

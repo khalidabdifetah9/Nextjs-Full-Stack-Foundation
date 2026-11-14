@@ -4,15 +4,21 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import DashboardShell from "@/components/dashboard/main/DashboardShell";
 
-export default async function DashboardLayout({ children }: { children: ReactNode }) {
+export default async function DashboardLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) redirect("/signin");
 
-  const { name, email, image } = session.user;
+  const { name, email, image, role } = session.user;
 
   return (
-    <DashboardShell user={{ name, email, image: image ?? null }}>
+    <DashboardShell
+      user={{ name, email, image: image ?? null, role: role ?? "user" }}
+    >
       {children}
     </DashboardShell>
   );
