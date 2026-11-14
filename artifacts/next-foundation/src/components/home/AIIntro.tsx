@@ -28,7 +28,10 @@ export default function IntelligentStudio() {
   });
 
   return (
-    <section id="studio" className="mt-20 scroll-mt-30 md:mt-32 lg:mt-50  font-poppins">
+    <section
+      id="studio"
+      className="mt-20 scroll-mt-30 md:mt-32 lg:mt-50  font-poppins"
+    >
       <div className="grid gap-8 lg:grid-cols-[2fr_1fr] lg:gap-12">
         <div className="flex flex-col gap-10 lg:justify-between lg:gap-16">
           <div className="grid gap-4 lg:grid-cols-[1fr_2fr] lg:gap-8">
@@ -45,9 +48,8 @@ export default function IntelligentStudio() {
                 className="text-base sm:text-lg text-[#243D35]/80"
               >
                 Let our advanced AI assistant analyze spatial layouts, suggest
-                harmonious interior color palettes, and generate real-time
-                design recommendations tailored specifically to your
-                architectural vision.
+                harmonious interior color palettes, and help you clear anything
+                you need to know with out even the need of reaching out to us.
               </motion.p>
             </div>
           </div>
@@ -70,14 +72,13 @@ export default function IntelligentStudio() {
           </div>
         </div>
 
-        {/* Vertical reveal: nothing moves sideways, so no horizontal overflow */}
         <motion.div
           {...reveal(0.2, 40)}
           className="relative h-96 sm:h-128 lg:h-auto lg:min-h-150 overflow-hidden rounded-lg bg-[#243D35]"
         >
           <video
             className="absolute inset-0 h-full w-full object-cover"
-            src="/vid1.mp4"
+            src="/videos/advertizing_vid.mp4"
             poster="/ai-assistant-poster.png"
             autoPlay
             muted

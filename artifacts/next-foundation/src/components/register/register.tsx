@@ -99,7 +99,7 @@ export default function SignUp() {
       <div className="relative h-90 sm:h-72 lg:h-auto">
         <BackButton className="md:inline-flex bg-white/90 px-5 py-4" />
         <Image
-          src="/register_img.png"
+          src="/register_img.avif"
           alt="Modern home interior"
           fill
           priority

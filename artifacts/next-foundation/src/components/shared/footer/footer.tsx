@@ -71,7 +71,7 @@ export default function Footer() {
   return (
     <footer className="relative px-3 overflow-hidden bg-[#243D35] font-poppins text-[#F7F6F2]">
       <Image
-        src="/footer_bg.png"
+        src="/footer_bg.avif"
         alt=""
         fill
         sizes="100vw"

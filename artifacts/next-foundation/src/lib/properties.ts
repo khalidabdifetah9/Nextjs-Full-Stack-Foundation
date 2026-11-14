@@ -19,12 +19,12 @@ export interface Property {
 export const featuredProperties: Property[] = [
   {
     id: "prop-1",
-    slug: "the-minimalist-haven",
+    slug: "/dashboard",
     label: "The Minimalist Haven",
     description:
       "An architectural masterpiece featuring open-plan living spaces and crisp white interior walls designed for custom color layering.",
     price: "$450,000",
-    src: "/properties/property-1.jpg",
+    src: "/properties/property-1.avif",
     alt: "minimalist haven property image",
     location: "Addis Ababa, Ayat",
     features: {
@@ -33,16 +33,16 @@ export const featuredProperties: Property[] = [
       kitchens: 1,
       sqft: 2400,
     },
-    image: "/properties/property-1.jpg",
+    image: "/properties/property-1.avif",
   },
   {
     id: "prop-2",
-    slug: "scandinavian-light-loft",
+    slug: "/dashboard",
     label: "Scandinavian Light Loft",
     description:
       "Bathed in natural daylight with expansive floor-to-ceiling windows, offering a blank canvas for warm earthy tones and modern wood accents.",
     price: "$580,000",
-    src: "/properties/property-2.jpg",
+    src: "/properties/property-2.avif",
     alt: "Scandinavian property image",
     location: "Addis Ababa, Bole",
     features: {
@@ -51,16 +51,16 @@ export const featuredProperties: Property[] = [
       kitchens: 1,
       sqft: 3100,
     },
-    image: "/properties/property-2.jpg",
+    image: "/properties/property-2.avif",
   },
   {
     id: "prop-3",
-    slug: "modern-aurora-residence",
+    slug: "/dashboard",
     label: "Modern Aurora Residence",
     description:
       "Sleek lines and high ceilings optimized for dynamic interior lighting setups and sophisticated palette personalization.",
     price: "$620,000",
-    src: "/properties/property-3.jpg",
+    src: "/properties/property-3.avif",
     alt: "Aurora property image",
     location: "Addis Ababa, CMC",
     features: {
@@ -69,7 +69,7 @@ export const featuredProperties: Property[] = [
       kitchens: 2,
       sqft: 2850,
     },
-    image: "/properties/property-3.jpg",
+    image: "/properties/property-3.avif",
   },
 ];
 

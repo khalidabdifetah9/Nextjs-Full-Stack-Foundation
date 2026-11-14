@@ -10,7 +10,6 @@ export default function AboutUsHero() {
 
   return (
     <section className="font-poppins">
-      {/* Image opens up like a window, same as the home hero */}
       <motion.div
         className="relative h-[55vh] w-full overflow-hidden sm:h-[60vh] md:h-[68vh]"
         initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
@@ -27,7 +26,7 @@ export default function AboutUsHero() {
             fill
             priority
             sizes="100vw"
-            src={"/Hue_Office.jpg"}
+            src={"/Hue_Office.avif"}
             alt="About Us Hero Background Image"
             className="object-cover"
           />
@@ -47,7 +46,6 @@ export default function AboutUsHero() {
         </motion.div>
       </motion.div>
 
-      {/* Giant wordmark: same rise + blur-to-sharp as the home hero */}
       <div className="overflow-hidden bg-white px-4 md:px-12">
         <h1 className="select-none pt-4 text-left text-[19vw] font-semibold leading-[0.85] tracking-tighter text-[#243D35] md:-mt-7 md:pt-0 md:text-[18vw] lg:text-[15vw]">
           <motion.span

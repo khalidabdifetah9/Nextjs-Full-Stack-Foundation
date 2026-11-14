@@ -3,11 +3,12 @@ import Link from "next/link";
 
 export default function PageNotFound() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative min-h-screen bg-[#f6f4f0] w-full overflow-hidden">
       <Image
-        src={"/404_bg.png"}
+        src={"/404_bg.avif"}
         alt="socket plug detaching"
         fill
+        fetchPriority="high"
         priority
         sizes="100vw"
         className="object-cover object-right md:object-center"

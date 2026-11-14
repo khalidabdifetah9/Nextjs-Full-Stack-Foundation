@@ -67,7 +67,7 @@ export default function Hero() {
             fill
             priority
             sizes="100vw"
-            src="/herro.png"
+            src="/herro.avif"
             alt="women relaxing in her house"
             className="object-cover rounded-b-md"
           />

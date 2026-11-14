@@ -74,7 +74,7 @@ export default function HowItWorks() {
           className="relative h-80 sm:h-112 lg:h-auto lg:min-h-150 overflow-hidden"
         >
           <Image
-            src="/relaxing.jpg"
+            src="/relaxing.avif"
             alt="White canvas home interior"
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
