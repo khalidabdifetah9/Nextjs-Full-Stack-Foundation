@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+  import type { NextConfig } from "next";
 
 const rawBasePath = process.env.BASE_PATH;
 const basePath =
@@ -8,6 +8,7 @@ const basePath =
 const replitDevDomain = process.env.REPLIT_DEV_DOMAIN;
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["@replit/object-storage", "@google-cloud/storage"],
   basePath,
   allowedDevOrigins: [
     "localhost",
