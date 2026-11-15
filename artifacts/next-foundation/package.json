@@ -18,6 +18,7 @@
     "drizzle-orm": "catalog:",
     "framer-motion": "catalog:",
     "next": "16.4.3",
+    "nodemailer": "^10.5.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "zod": "^4.6.7"
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.14",
     "@types/node": "catalog:",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "eslint": "^9.0.0",

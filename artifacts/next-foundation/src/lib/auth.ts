@@ -1,3 +1,4 @@
+import { resetPasswordEmail, sendEmail } from "@/lib/email";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -17,7 +18,13 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
-    autoSignIn: true, // sign the user in right after registering
+    autoSignIn: true,
+    resetPasswordTokenExpiresIn: 60 * 60, // 1 hour
+    revokeSessionsOnPasswordReset: true, // signs out other devices after a reset
+    sendResetPassword: async ({ user, url }) => {
+      // Not awaited on purpose: a slow response would reveal whether this email has an account
+      void sendEmail({ to: user.email, ...resetPasswordEmail(user.name, url) });
+    },
   },
 
   socialProviders: {
