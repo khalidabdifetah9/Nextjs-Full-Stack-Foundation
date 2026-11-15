@@ -22,8 +22,8 @@ export default function Hero() {
             {...fadeUp(0.1)}
             className="w-full max-w-sm font-poppins text-base tracking-wider text-[#243D35] sm:max-w-md sm:text-xl md:w-99 md:max-w-none md:text-2xl"
           >
-            Discover thoughtfully designed homes and make every space reflect
-            your style, before you even move in
+            Don’t just imagine your next home. Experience it, make it yours, and
+            choose it with total confidence
           </motion.p>
 
           <div className="hidden w-40 md:block" aria-hidden="true" />
@@ -32,7 +32,9 @@ export default function Hero() {
         <h1 className="mt-8 select-none text-right text-[calc((100vw_-_1.5rem)_*_0.19)] font-semibold leading-[0.85] tracking-tighter text-[#243D35] sm:mt-10 md:mt-6 md:text-[18vw] lg:-mt-30 lg:text-[15vw]">
           <motion.span
             className="inline-block"
-            initial={reduce ? false : { opacity: 0, y: 60, filter: "blur(8px)" }}
+            initial={
+              reduce ? false : { opacity: 0, y: 60, filter: "blur(8px)" }
+            }
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1, delay: 0.25, ease }}
           >
@@ -40,7 +42,9 @@ export default function Hero() {
           </motion.span>
           <motion.span
             className="inline-block"
-            initial={reduce ? false : { opacity: 0, y: 60, filter: "blur(8px)" }}
+            initial={
+              reduce ? false : { opacity: 0, y: 60, filter: "blur(8px)" }
+            }
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1, delay: 0.4, ease }}
           >

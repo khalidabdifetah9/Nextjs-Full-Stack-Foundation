@@ -7,28 +7,28 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 const faqs = [
   {
-    id: "canvas",
-    question: "What is a white canvas residence?",
+    id: "account",
+    question: "Do I need an account to explore homes?",
     answer:
-      "A finished, move in ready structure with neutral walls and floors, built so you can personalize every room without tearing anything out.",
+      "Yes. Create an account and sign in, then open your dashboard to walk through each home in 360° and try wall colors.",
   },
   {
-    id: "palettes",
-    question: "How do real time room palettes work?",
+    id: "colors",
+    question: "How does the wall color preview work?",
     answer:
-      "Pick a room, choose a palette, and see wall shades, finishes, and accents update instantly before you commit to a single change.",
+      "Pick a home and a room, choose a color or your own custom shade, and the walls update instantly. Colors may look slightly different in real life.",
   },
   {
-    id: "cost",
-    question: "Is the AI design assistant free to use?",
+    id: "reserve",
+    question: "What does reserving a home do?",
     answer:
-      "Yes. Creating an account and testing palettes is free. You only pay when you decide to move forward with a property.",
+      "It holds the home for the days you choose so nobody else can buy or rent it. You pay per day through Chapa, and reservations are non-refundable.",
   },
   {
-    id: "support",
-    question: "Can I speak to a designer before deciding?",
+    id: "meeting",
+    question: "Can I book a meeting before deciding?",
     answer:
-      "Absolutely. Book a free consultation and a designer will walk you through layouts, materials, and next steps.",
+      "Yes. Open Schedule in your dashboard, pick a date and time, and tell us what you want to talk about.",
   },
 ];
 
@@ -38,7 +38,7 @@ export default function Faq() {
   const gridRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [offsets, setOffsets] = useState<{ x: number; y: number }[] | null>(
-    null
+    null,
   );
   const inView = useInView(gridRef, { once: true, amount: 0.2 });
 
@@ -57,7 +57,7 @@ export default function Faq() {
             x: first.offsetLeft - el.offsetLeft,
             y: first.offsetTop - (el.offsetTop + lift),
           };
-        })
+        }),
       );
     };
     measure();

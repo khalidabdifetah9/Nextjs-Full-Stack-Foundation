@@ -5,7 +5,7 @@ const LAST_UPDATED = "November 4, 2026";
 
 export default function TermsOfService() {
   return (
-    <section className="mt-10 px-12 font-poppins md:mt-16">
+    <section className="mt-10 px-3 md:px-12 font-poppins md:mt-16">
       <header className="max-w-3xl space-y-4 md:space-y-6">
         <h1 className="text-4xl font-semibold leading-tight text-[#243D35] sm:text-5xl lg:text-6xl">
           Terms of Service

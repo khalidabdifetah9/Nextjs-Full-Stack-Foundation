@@ -31,9 +31,8 @@ export default function FeaturedProperties() {
           {...reveal(0.12, 24)}
           className="text-base font-poppins sm:text-xl md:text-2xl text-[#243D35]/80"
         >
-          Explore white canvas residences engineered for real time interior
-          personalization. Select a structure, test custom room palettes, and
-          find your ideal space
+          Browse move in ready homes with neutral walls, tour each one in 360°,
+          and try your own wall colors before you decide
         </motion.p>
       </header>
 
@@ -41,7 +40,6 @@ export default function FeaturedProperties() {
         {featuredProperties.map((properties, i) => (
           <motion.div
             key={properties.id}
-            // Right-hand card in each row follows the left one slightly
             {...reveal((i % 2) * 0.15, 40)}
             className="flex flex-col space-y-4 md:space-y-5
               md:last:odd:col-span-2
@@ -60,7 +58,6 @@ export default function FeaturedProperties() {
                 className="object-cover md:group-hover:blur-sm md:group-hover:scale-[1.08] group-focus-visible:blur-sm transition-all duration-600"
               />
 
-              {/* "View" label: always visible on mobile (no hover on touch), hover-reveal on md+ */}
               <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
                 <span
                   className="text-xl md:text-2xl font-medium text-white/90 drop-shadow-md
@@ -75,7 +72,6 @@ export default function FeaturedProperties() {
               </span>
             </Link>
 
-            {/* Title + meta */}
             <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-8 px-1">
               <h3 className="font-bold text-xl md:text-2xl text-[#243D35] sm:whitespace-nowrap">
                 {properties.label}

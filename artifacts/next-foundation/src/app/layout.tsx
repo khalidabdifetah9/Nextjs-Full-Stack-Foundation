@@ -12,7 +12,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "HueEstate",
   description:
-    "Discover thoughtfully designed luxury homes and visualize interior room colors, lighting, and textures in real time before you move in.",
+    "Explore homes in 360°, try different wall colors in real time, and reserve your favorite before you buy or rent.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
