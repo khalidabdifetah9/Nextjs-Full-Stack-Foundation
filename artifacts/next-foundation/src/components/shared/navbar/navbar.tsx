@@ -137,7 +137,7 @@ export default function NavBar() {
             width={100}
             height={100}
             alt="Logo"
-            className="h-auto w-24 sm:w-28 xl:w-17"
+            className="h-auto w-16 sm:w-18 xl:w-17"
           />
         </Link>
 

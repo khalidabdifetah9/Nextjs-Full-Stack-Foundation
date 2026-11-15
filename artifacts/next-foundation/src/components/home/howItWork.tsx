@@ -17,7 +17,6 @@ export default function HowItWorks() {
   );
   const inView = useInView(listRef, { once: true, amount: 0.25 });
 
-  // Measure how far each card must sit from the first card to form the stack
   useEffect(() => {
     const measure = () => {
       const first = cardRefs.current[0];
@@ -48,7 +47,7 @@ export default function HowItWorks() {
   const total = howItWorksSection.steps.length;
 
   return (
-    <section id="how-it-works" className="mt-20 scroll-mt-24 md:mt-32 lg:mt-50">
+    <section id="how-it-works" className="scroll-mt-24 md:mt-32 lg:mt-50">
       <header className="space-y-4 md:space-y-6 max-w-300 mx-auto text-center mb-10 md:mb-20">
         <motion.h2
           {...reveal(0)}

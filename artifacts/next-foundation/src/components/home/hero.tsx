@@ -8,10 +8,19 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export default function Hero() {
   const reduce = useReducedMotion();
 
+  const t = (duration: number, delay: number) =>
+    reduce ? { duration: 0 } : { duration, delay, ease };
+
   const fadeUp = (delay: number, y = 24) => ({
-    initial: reduce ? false : { opacity: 0, y },
+    initial: { opacity: 0, y },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.9, delay, ease },
+    transition: t(0.9, delay),
+  });
+
+  const wordIn = (delay: number) => ({
+    initial: { opacity: 0, y: 60, filter: "blur(8px)" },
+    animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+    transition: t(1, delay),
   });
 
   return (
@@ -29,39 +38,27 @@ export default function Hero() {
           <div className="hidden w-40 md:block" aria-hidden="true" />
         </div>
 
-        {/* Tablet fix: md:mt-6 (stacked) -> lg:-mt-30 (desktop overlap restored) */}
         <h1 className="mt-8 select-none text-right text-[19cqw] font-semibold leading-[0.85] tracking-tighter text-[#243D35] sm:mt-10 md:mt-6 md:text-[18vw] lg:-mt-30 lg:text-[15vw]">
-          <motion.span
-            className="inline-block"
-            initial={reduce ? false : { opacity: 0, y: 60, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1, delay: 0.25, ease }}
-          >
+          <motion.span className="inline-block" {...wordIn(0.25)}>
             Hue
           </motion.span>
-          <motion.span
-            className="inline-block"
-            initial={reduce ? false : { opacity: 0, y: 60, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1, delay: 0.4, ease }}
-          >
+          <motion.span className="inline-block" {...wordIn(0.4)}>
             Estate
           </motion.span>
         </h1>
       </div>
 
-      {/* Image "opens up" like a window being revealed */}
       <motion.div
         className="relative h-[55vh] w-full overflow-hidden rounded-b-md sm:h-[65vh] md:h-[75vh]"
-        initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
+        initial={{ clipPath: "inset(0 0 100% 0)" }}
         animate={{ clipPath: "inset(0 0 0% 0)" }}
-        transition={{ duration: 1.3, delay: 0.55, ease }}
+        transition={t(1.3, 0.55)}
       >
         <motion.div
           className="absolute inset-0"
-          initial={reduce ? false : { scale: 1.15 }}
+          initial={{ scale: 1.15 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 1.8, delay: 0.55, ease }}
+          transition={t(1.8, 0.55)}
         >
           <Image
             fill
