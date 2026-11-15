@@ -7,7 +7,7 @@ interface Mail {
   text: string;
 }
 
-let transporter: nodemailer.Transporter | null = null;
+let transporter: ReturnType<typeof nodemailer.createTransport> | null = null;
 
 export async function sendEmail({ to, subject, html, text }: Mail) {
   const user = process.env.SMTP_USER;
