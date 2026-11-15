@@ -98,7 +98,7 @@ export default function NavBar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 px-6 transition-all duration-300 ${
+      className={`sticky top-0 z-50 md:px-12 px-3 transition-all duration-300 ${
         hide ? "-translate-y-full" : "translate-y-0"
       } ${
         showBg

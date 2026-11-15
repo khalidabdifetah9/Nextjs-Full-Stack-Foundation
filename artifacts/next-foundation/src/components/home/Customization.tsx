@@ -14,7 +14,6 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Customization({
   videoSrc = "/videos/house_preview.mp4",
-  posterSrc,
   ctaHref = "/dashboard",
   className = "",
 }: CustomizationProps) {
@@ -108,25 +107,33 @@ export default function Customization({
           </motion.div>
         </div>
 
-        {/* Right: video reveals with a soft clip + settle */}
+        {/* Right: the OUTER box is never clipped, so Chrome can see it and
+            start the reveal. The INNER box does the clip animation. */}
         <motion.div
-          initial={reduce ? false : { opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-          whileInView={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+          initial={reduce ? "shown" : "hidden"}
+          whileInView="shown"
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 1.1, delay: 0.2, ease }}
-          className="relative aspect-4/3 w-full overflow-hidden rounded-md bg-[#F7F6F2]"
+          className="relative aspect-4/3 w-full"
         >
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            src={videoSrc}
-            poster={posterSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-label="Screen recording of choosing a house and changing its colors live"
-          />
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, clipPath: "inset(0 0 100% 0)" },
+              shown: { opacity: 1, clipPath: "inset(0 0 0% 0)" },
+            }}
+            transition={{ duration: 1.1, delay: 0.2, ease }}
+            className="absolute inset-0 overflow-hidden rounded-md bg-[#F7F6F2]"
+          >
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="Screen recording of choosing a house and changing its colors live"
+            />
+          </motion.div>
         </motion.div>
       </div>
     </section>

@@ -79,7 +79,6 @@ export default function IntelligentStudio() {
           <video
             className="absolute inset-0 h-full w-full object-cover"
             src="/videos/advertizing_vid.mp4"
-            poster="/ai-assistant-poster.png"
             autoPlay
             muted
             loop
